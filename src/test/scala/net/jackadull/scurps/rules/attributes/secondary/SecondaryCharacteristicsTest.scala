@@ -1,0 +1,6 @@
+package net.jackadull.scurps.rules.attributes.secondary
+
+import net.jackadull.scurps.testing.HierarchySpec
+
+class SecondaryCharacteristicsTest extends HierarchySpec
+{testHierarchy(SecondaryCharacteristicsTestGenerator.initialConditions(SecondaryCharacteristicsTestAccessorImpl))}
