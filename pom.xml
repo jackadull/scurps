@@ -38,6 +38,11 @@
     <url>https://github.com/jackadull/scurps</url>
   </scm>
 
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/orgs/jackadull/projects/1</url>
+  </issueManagement>
+
   <properties>
     <version.depedency.spire>0.15.0</version.depedency.spire>
   </properties>
