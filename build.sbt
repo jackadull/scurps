@@ -15,6 +15,7 @@ lazy val jackadull = JackadullBuild onTravis ProjectInfo(
 lazy val scurpsBuild = (project in file (".")).configure(jackadull project)
   .configure(jackadull dependencies (ScalaTest % Test))
   .settings(libraryDependencies ++= Seq(
+    "net.jackadull" %% "spec-driven-scalatest" % "1.0.2" % Test,
     "org.typelevel" %% "spire" % "0.16.0"
   ))
 
