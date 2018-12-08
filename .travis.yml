@@ -1,22 +1,24 @@
-language: java
+language: scala
+scala:
+- 2.12.7
 sudo: false
-dist: trusty
-jdk: oraclejdk9
-addons:
-  apt:
-    packages:
-      - oracle-java9-installer
 cache:
   directories:
-  - "$HOME/.m2/repository"
-  - "$HOME/apache-maven-3.5.4"
-before_install:
-- export M2_HOME=$HOME/apache-maven-3.5.4
-- if [ ! -d $M2_HOME/bin ]; then curl https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zxf - -C $HOME; fi
-- export PATH=$M2_HOME/bin:$PATH
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt"
+before_cache:
+- find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+- find $HOME/.sbt -name "*.lock" -print -delete
 install:
-  - mvn -P jackadull-ci test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+- tar xv -C project/deployment -f project/deployment/local.secrets.tar
 script:
-  - mvn -P jackadull-ci test jacoco:report
-after_success:
-  - mvn -P jackadull-ci coveralls:report
+- sbt ci
+env:
+  global:
+  - secure: ZN/nkPGLH/3rZbmKMaTO408kPLs8L4z5bsPPtTUh/xMyTrIlsc9qNqDQuc0ahrAjrm07mrcZemtwjPtDR7TajoUkl/l+4wMhMKp/sfUibCGBUSdYCasRwsvbeGKMspmwPUEaFI9gTCYFHCJqvG286H8tCHOcUt4Mr3nyiVhuF4A250p+WlOsETzVYd0rvvdcOV0x4ZyXmPAkma3NHHShNfaCBEDHpA3cn3RBPP3GIPefWSXra+jHsCLNZKyPNVyTD622Q7M1ZE2ch8a9sNfrrQasSFeMfQ8wGOAiYlG6XLpQLn06GK7HfcUx6IGSiUf0ilRbD13alIIkjW2i7y7o1DfIABqmDm3xyjV6bsIL21XVEkOS9/IAakuoejB3xLOUmkbRwXQvAbZN4DJoQSMhZ5ahn5PvxVDF7l2yWFIPywgf/U9TtkK3HsQXMhKeXKvvJVAnebqQHgYoZkPVeAYCtwHnAuoDDeMEb6m7diL/rskVgM0pHlWU7icqZ6qkLYQraRvfLd6isPDgwdUYQicuuoYktcnaXEYLKSxh6ifrIZmyzT/wa+7Aq5JVUCGdazDOmp2b9dcems6tyEiNzACiWCva9/YI2NSqJky+J6cM5QMRyhqiiULtD2ne2aQwjqoDK4xhYuz/wQC2LkT22Wz8gxpsvVrdd0049ppijM1NIeM=
+  - secure: QD5bFl/3SOJC+HywodapSZgUFYI/jf9IvmdTN2FGaEqLBLFuprwPpUnejyB+VQehtQzOnCRH7c9Ulq37UZWd2iz7ySTD5rFOzfArdl3P7yWTEfciy/s6v5pGdTl8tJJ/wyW+bc8xH5kfHXyLpwMb7nd72Tbgoom9SGiNYtg8J9L28TUb2E3BgeBkii43nMHJuvnswY2YJ8s3kL9cz2CJ6nY7Oq7yGW/74rhXPp53yRep9WbBwAhgpNAmqouWU15yArkOsDj03HGRtbNT72f8KFOdfodrQCNtwdudxFgg4mhJFJrNRboHpKsJ8LO83xAbraRThY10C6UU2QsB/K9fdvhB0lCp0J2sNNUdDiwQnKYZ+c1PZvh5F6aYZ6zFRS9kHODEXKDdy9Zs9qZsLZSZxa2M9vm8t6B9dmq84z/nmfbvJhaqXsFRYHf15ArZICAeh4W3r6v8qozt4htXmAmO2aH/vP+p7ihQ0DibqTBLO1ii4QXOedprdgDmiNUCrQ6a1anFk1fG7f83BiQ5Juf2pOGit8qbASEBHo+erqpN1eNySHsv7IDW0cG7h8vXJX7AtxrnNTR5F+zT/TX1IOn4KYJpVxJAvmoVPOiYwxTCrRuJEFvxYQ/7hMuJo2MwXlp9nS28BpU8m2J9IwbfmgzgngYS9Eo6pZDQ0wRlMcoIX3s=
+  - secure: e7FD/UlGT3oxiIivBRSmOIBfAaSDDmUksVYpdRTT7aAZDPlMD9y1ToEOTKLujIhWs0IrJ5CBFdahHFtspSmx7/6hQhNSpKzqKiCsBo0xrqgddddradFPshU9XgOI4kqzZX4B+Lgy0rmi+1/rWXq3xOkdLq+Bls7Sca5HjJjzFav35prb7caveZq6dWUdBPpuq2VbvDTMbnQ4qqypqrFYMbKxcqdHUflRk+yX1eZlTXZJc2r7NmwPXgAfhCmkPcaralmejR9GEhZwUmv/wYmmD8kPDGNXVwovZ2dbWD1qyCOzFDXTGD4lvHJlSMhrNXzZXXlQye05etf6ylBVtGAFXt4QE0QoZb9f1W7MbNr1fSjAe7kKTgdCqmbPfO0dGcvZ8FyOkBSrZBemLDJKl8cucFfZlfGM/rqsJ+fZ2G7zMVDxX3RnWRF+JKWtSjtVDS/xOvuU6mnIGKKT/m+E1Nurv8K40WjDUPV7EEp6b4tAixXpd+wfD6Ad6+CnjvFlP1gQhC6V7oNq67TQYX+ScocSnRU5Rokut96kKAlASX2j52CBXZdvplRF3ENbRx+3jCzRt7A5Z3ZpIzCWUP+6+o4sR4i4S2bjsqaS+nVOD0O7mI4aezWWQySlxALe6sGmpD6kkQc7ArsqPQp9bjp8iXJgtVoUYVGuMdaXWh+QiGQNryQ=
+before_install:
+- openssl aes-256-cbc -K $encrypted_87d76bb8b34e_key -iv $encrypted_87d76bb8b34e_iv
+  -in project/deployment/secrets.tar.enc -out project/deployment/local.secrets.tar
+  -d
