@@ -14,7 +14,9 @@ lazy val jackadull = JackadullBuild onTravis ProjectInfo(
 
 lazy val scurpsBuild = (project in file (".")).configure(jackadull project)
   .configure(jackadull dependencies (ScalaTest % Test))
+  .settings(resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
   .settings(libraryDependencies ++= Seq(
+    "net.jackadull" %% "gurps-specification" % "0.0.1-SNAPSHOT" % Test,
     "net.jackadull" %% "spec-driven-scalatest" % "1.0.2" % Test,
     "org.typelevel" %% "spire" % "0.16.0"
   ))
