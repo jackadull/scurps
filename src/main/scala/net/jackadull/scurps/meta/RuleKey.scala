@@ -1,3 +1,3 @@
 package net.jackadull.scurps.meta
 
-sealed trait Derivation[+A]
+trait RuleKey[R<:Rule]
