@@ -1,4 +1,4 @@
-package net.jackadull.scurps.bib
+package scurps.bib
 
 /** Bibliographic reference. */
 sealed trait BibRef

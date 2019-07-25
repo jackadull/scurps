@@ -1,4 +1,4 @@
-package net.jackadull.scurps.meta
+package scurps.meta
 
 import scala.language.higherKinds
 

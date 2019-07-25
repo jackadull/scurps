@@ -1,4 +1,4 @@
-package net.jackadull.scurps
+package scurps
 
 package object bib {
   val G4e_Campaigns:Work = Work(s"$GURPS_Basic_Set: Campaigns", edition = Fourth_Edition)

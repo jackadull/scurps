@@ -1,4 +1,4 @@
-package net.jackadull.scurps.meta
+package scurps.meta
 
 trait GameContext extends PMap[ContextKey] with ApplyRule {
   def ruleCatalog:RuleCatalog

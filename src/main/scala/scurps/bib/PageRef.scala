@@ -1,4 +1,4 @@
-package net.jackadull.scurps.bib
+package scurps.bib
 
 /** Refers to one or more page numbers. */
 sealed trait PageRef

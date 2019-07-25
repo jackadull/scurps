@@ -1,4 +1,4 @@
-package net.jackadull.scurps.meta
+package scurps.meta
 
 sealed trait Rule
 trait Rule0[+R] extends Rule {

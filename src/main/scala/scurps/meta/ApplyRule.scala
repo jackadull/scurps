@@ -1,4 +1,4 @@
-package net.jackadull.scurps.meta
+package scurps.meta
 
 /** Subtypes can apply a rule, by passing in the rule and its parameters. The context does not need to be provided on
  * every call; the [[ApplyRule]] instance injects it. */

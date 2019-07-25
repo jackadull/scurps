@@ -1,4 +1,4 @@
-package net.jackadull.scurps
+package scurps
 
 package object meta {
   trait ContextKey[V]

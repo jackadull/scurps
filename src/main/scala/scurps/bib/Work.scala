@@ -1,6 +1,6 @@
-package net.jackadull.scurps.bib
+package scurps.bib
 
-import net.jackadull.scurps.bib.BibRef.WorkRef
+import scurps.bib.BibRef.WorkRef
 
 /** Refers to one body of work, such as a book. */
 final case class Work(name:String, edition:Option[String]) {
