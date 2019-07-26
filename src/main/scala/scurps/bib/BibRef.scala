@@ -9,6 +9,7 @@ object BibRef {
     def chapter(hierarchy:String*):WorkRef = copy(chapterHierarchy = hierarchy.toSeq)
     def page(ref:PageRef):WorkRef = copy(page = Some(ref))
     def page(pageNumber:Int):WorkRef = page(PageRef.single(pageNumber))
+    def subChapter(chapterName:String):WorkRef = copy(chapterHierarchy = chapterHierarchy :+ chapterName)
 
     override val toString:String =
       (work.toString +: chapterHierarchy.map("\"" + _ + "\"")).mkString(", ") + (page match {
