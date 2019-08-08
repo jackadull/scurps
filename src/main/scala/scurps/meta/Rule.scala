@@ -1,6 +1,9 @@
 package scurps.meta
 
 sealed trait Rule
+object Rule {
+  type RuleTuple[R<:Rule] = (RuleKey[R],R)
+}
 trait Rule0[+R] extends Rule {
   def apply()(implicit context:GameContext):Derivation[R]
 }
