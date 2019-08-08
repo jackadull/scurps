@@ -1,7 +1,8 @@
 package scurps.basicset.attributes.basic
 
+import scurps.meta.Rule.Rule0
+import scurps.meta.RuleKey
 import scurps.meta.Score.IntScore
-import scurps.meta.{Rule0, RuleKey}
 
 trait BasicAttribute extends RuleKey[Rule0[IntScore]]
 object BasicAttribute {

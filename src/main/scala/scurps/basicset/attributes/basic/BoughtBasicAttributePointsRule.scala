@@ -2,8 +2,9 @@ package scurps.basicset.attributes.basic
 
 import scurps.meta.ContextKey.Subject
 import scurps.meta.Derivation.{DefaultZero, MissingContextValue, StoredValue}
+import scurps.meta.Rule.Rule1
 import scurps.meta.Score.IntScore
-import scurps.meta.{Derivation, GameContext, Rule1}
+import scurps.meta.{Derivation, GameContext}
 
 object BoughtBasicAttributePointsRule extends Rule1[BasicAttribute,IntScore] {
   override def apply(attribute:BasicAttribute)(implicit context:GameContext):Derivation[IntScore] =

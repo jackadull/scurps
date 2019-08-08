@@ -1,5 +1,7 @@
 package scurps.meta
 
+import scurps.meta.Rule.Rule1
+
 import scala.language.higherKinds
 
 /** Compilation proof for rule type requirements. */

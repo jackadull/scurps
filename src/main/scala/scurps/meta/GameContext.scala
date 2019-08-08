@@ -2,6 +2,7 @@ package scurps.meta
 
 import scurps.basicset.attributes.basic.PMapLike
 import scurps.meta.Derivation.MissingRule
+import scurps.meta.Rule.{Rule0, Rule1, Rule2}
 
 trait GameContext extends PMap[ContextKey] with PMapLike[ContextKey,GameContext] {
   def ruleCatalog:RuleCatalog
