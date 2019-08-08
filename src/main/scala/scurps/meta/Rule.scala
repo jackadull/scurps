@@ -2,7 +2,7 @@ package scurps.meta
 
 sealed trait Rule
 object Rule {
-  type RuleTuple[R<:Rule] = (RuleKey[R],R)
+  type RuleTuple[R<:Rule] = (RuleKey[R],R) // TODO lambda and remove?
 
   trait Rule0[+R] extends Rule {
     def apply()(implicit context:GameContext):Derivation[R]

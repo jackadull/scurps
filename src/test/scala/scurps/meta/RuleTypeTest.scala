@@ -1,6 +1,7 @@
 package scurps.meta
 
 import scurps.meta.Rule.Rule1
+import scurps.meta.RuleKey.RuleKey1
 
 import scala.language.higherKinds
 
@@ -9,7 +10,7 @@ class RuleTypeTest {
   trait PropertyKey[V]
 
   object AKey extends PropertyKey[Int]
-  object ARuleKey extends RuleKey[Rule1[PMap[PropertyKey],Int]]
+  object ARuleKey extends RuleKey1[PMap[PropertyKey],Int]
 
   val aRuleImpl:Rule1[PMap[PropertyKey],Int] = new Rule1[PMap[PropertyKey],Int] {
     override def apply(v1:PMap[PropertyKey])(implicit context:GameContext):Derivation[Int] = {
