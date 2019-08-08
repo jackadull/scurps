@@ -7,7 +7,7 @@ import scurps.meta.{Derivation, GameContext}
 
 object BasicAttributeScoreRule extends Rule1[BasicAttribute,IntScore] {
   override def apply(attribute:BasicAttribute)(implicit context:GameContext):Derivation[IntScore] =
-    (context(FreeAttributeScore, attribute), context(BoughtBasicAttributePoints, attribute)) match {
+    (FreeAttributeScore.derivation(attribute), BoughtBasicAttributePoints.derivation(attribute)) match {
       case (freeD:Defined[IntScore], boughtD:Defined[IntScore]) => ??? // TODO sum
       case (undefined:Undefined, _) => undefined
       case (_, undefined:Undefined) => undefined
