@@ -1,6 +1,7 @@
 package scurps.basicset.attributes.basic
 
 import scurps.meta.Score.IntScore
-import scurps.meta.{Rule0, RuleKey, ValueKey}
+import scurps.meta.{Rule1, RuleKey, ValueKey}
 
-final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends RuleKey[Rule0[IntScore]] with ValueKey[IntScore]
+final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends ValueKey[IntScore]
+object BoughtBasicAttributePoints extends RuleKey[Rule1[BasicAttribute,IntScore]]
