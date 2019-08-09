@@ -5,7 +5,7 @@ import scurps.meta.Score.IntScore
 import scurps.meta.{Derivation, GameContext}
 
 trait BasicAttribute extends RuleKey0[IntScore] {
-  override def derivation()(implicit context:GameContext):Derivation[IntScore] = BasicAttributeScore.derivation(this)
+  override def derive(implicit context:GameContext):Derivation[IntScore] = context(BasicAttributeScore, this)
 }
 object BasicAttribute {
   object Strength extends BasicAttribute
