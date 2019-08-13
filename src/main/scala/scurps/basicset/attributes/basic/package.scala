@@ -8,7 +8,7 @@ package object basic {
   val basicAttributeRules:RuleCatalog = RuleCatalog(
     BasicAttributeScore -> BasicAttributeScoreRule,
     BoughtBasicAttributePoints -> BoughtBasicAttributePointsRule,
-    FreeAttributeScore ->
+    FreeAttributeScore -> // TODO should this be undefined if there is no subject?
       IntScore(10).asConstant(Ch01_Creating_A_Character.Basic_Attributes.chapter.page(14)).forAny[BasicAttribute]
   )
 }
