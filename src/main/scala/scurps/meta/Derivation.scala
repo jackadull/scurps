@@ -11,7 +11,8 @@ object Derivation {
   sealed trait Undefined extends Derivation[Nothing]
 
   final case class DefaultZero[+A](key:ValueKey[_], value:A) extends Defined[A]
-  final case class DefinedAsConstant[+A](key:RuleKey[_<:Rule], value:A, bibRef:BibRef) extends Defined[A]
+  final case class DefinedAsConstant[+A](value:A, bibRef:BibRef) extends Defined[A]
+  final case class ForAny[-T1,+A](value:Derivation[A]) extends Derivation[A] // TODO is this Defined or Undefined?
   final case class FromContext[+A](key:ContextKey[_], value:A) extends Defined[A]
   final case class MissingContextValue(key:ContextKey[_]) extends Undefined
   final case class MissingRule(key:RuleKey[_<:Rule]) extends Undefined
