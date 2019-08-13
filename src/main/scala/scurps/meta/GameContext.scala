@@ -1,6 +1,5 @@
 package scurps.meta
 
-import scurps.basicset.attributes.basic.PMapLike
 import scurps.meta.Derivation.{FromContext, MissingContextValue}
 import scurps.meta.RuleKey.{RuleKey0, RuleKey1}
 

@@ -1,7 +1,5 @@
 package scurps.meta
 
-import scurps.basicset.attributes.basic.PMapLike
-
 import scala.language.higherKinds
 
 /** Polymorphic map, whose value types are derived from the reference keys of type [[K]]. */

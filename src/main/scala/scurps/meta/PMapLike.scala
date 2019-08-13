@@ -1,4 +1,4 @@
-package scurps.basicset.attributes.basic
+package scurps.meta
 
 import scala.language.higherKinds
 
