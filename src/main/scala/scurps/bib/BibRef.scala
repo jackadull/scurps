@@ -1,9 +1,19 @@
 package scurps.bib
 
+import scurps.bib.BibRef.Empty
+
 /** Bibliographic reference. */
-sealed trait BibRef
+sealed trait BibRef {
+  def +(that:BibRef):BibRef = (this, that) match {
+    case (Empty,_) => that
+    case (_,Empty) => this
+    case _ => sys.error("combination with non-empty BibRef is not yet implemented") // TODO implement BibRef combinations
+  }
+}
 object BibRef {
   def work(work:Work):WorkRef = WorkRef(work, chapterHierarchy = Seq.empty, page = None)
+
+  object Empty extends BibRef
 
   final case class WorkRef(work:Work, chapterHierarchy:Seq[String], page:Option[PageRef]) extends BibRef {
     def chapter(hierarchy:String*):WorkRef = copy(chapterHierarchy = hierarchy.toSeq)
