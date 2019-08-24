@@ -1,10 +1,11 @@
 package scurps.meta
 
-import scurps.meta.Rule.{DefineAsConstant, Rule0}
 import scurps.meta.math.Add
+import scurps.meta.rule.Rule
+import scurps.meta.rule.Rule.Rule0
 
 sealed trait Score[+A] extends Any {
-  def asConstant:Rule0[this.type] = DefineAsConstant(this)
+  def asConstant:Rule0[this.type] = Rule.constant(this)
 }
 object Score {
   @inline def apply(intValue:Int):IntScore = IntScore(intValue)
