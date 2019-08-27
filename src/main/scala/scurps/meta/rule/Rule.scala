@@ -2,8 +2,8 @@ package scurps.meta.rule
 
 import scurps.meta.Concept
 import scurps.meta.context.RuleContext
-import scurps.meta.derivation.DerivationF.DerivationF0
-import scurps.meta.derivation.Params.{PList, PNil}
+import scurps.meta.derivation.DerivationF.{DerivationF0, DerivationF1, DerivationF2}
+import scurps.meta.derivation.Params.{PList, PNil, Params1, Params2}
 import scurps.meta.derivation.{Derivation, DerivationF, Params}
 import scurps.meta.math.Add
 import scurps.meta.rule.Rule.{AddRule, ForAny}
@@ -14,9 +14,15 @@ sealed trait Rule[-P<:Params,+R] extends DerivationF[P,RuleContext,R] {
 }
 object Rule {
   def constant[A](value:A):Rule0[A] = Constant(value)
-  def evalKey[P<:Params,R](key:RuleKey[P,R]):Rule[P,R] = EvalKey(key)
+
+  private[rule] def evalKey[P<:Params,R](key:RuleKey[P,R]):Rule[P,R] = EvalKey(key)
+
+  def apply[T1,R](createRule:Rule0[T1]=>Rule[PNil,R]):Rule1[T1,R] = ??? // TODO
+  def apply[T1,T2,R](createRule:(Rule0[T1],Rule0[T2])=>Rule[PNil,R]):Rule2[T1,T2,R] = ??? // TODO
 
   sealed trait Rule0[+R] extends Rule[PNil,R] with DerivationF0[RuleContext,R]
+  sealed trait Rule1[-T1,+R] extends Rule[Params1[T1],R] with DerivationF1[T1,RuleContext,R]
+  sealed trait Rule2[-T1,-T2,+R] extends Rule[Params2[T1,T2],R] with DerivationF2[T1,T2,RuleContext,R]
 
   final case class AddRule[-P<:Params,+R] private(lhs:Rule[P,R], rhs:Rule[P,R])(implicit add:Add[R]) extends Rule[P,R] {
     override def apply(params:P, context:Derivation[RuleContext]):Derivation[R] =
