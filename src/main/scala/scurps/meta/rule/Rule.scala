@@ -3,11 +3,11 @@ package scurps.meta.rule
 import scurps.meta.Concept
 import scurps.meta.context.RuleContext
 import scurps.meta.derivation.Params.{PList, PNil, Params1, Params2}
-import scurps.meta.derivation.{Derivation, DerivationF, Params}
+import scurps.meta.derivation.{Derivation, Params}
 import scurps.meta.math.Add
 import scurps.meta.rule.Rule.{AddRule, ForAny}
 
-sealed trait Rule[-P<:Params,+R] extends DerivationF[P,RuleContext,R] {
+sealed trait Rule[-P<:Params,+R] extends ((P,Derivation[RuleContext])=>Derivation[R]) {
   def :+[P2<:P,R2>:R](that:Rule[P2,R2])(implicit add:Add[R2]):Rule[P2,R2] = AddRule(this, that)
   def forAny[C](implicit concept:Concept[C]):Rule[PList[C,P],R] = ForAny(this, concept)
 }

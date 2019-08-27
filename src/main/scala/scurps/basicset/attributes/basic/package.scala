@@ -24,6 +24,15 @@ package object basic {
 //    BoughtBasicAttributePoints ->
 //      GameContext.get(Subject).get(BoughtBasicAttributePoints.of(Given[BasicAttribute])).orDefault(Score(0)),
 
+//    BoughtBasicAttributePoints -> (Rule {attribute:BasicAttribute =>
+//      Subject.getWithDefault0(BoughtBasicAttributePoints.of(attribute))
+//    }),
+
+//    BoughtBasicAttributePoints -> (Rule {Subject.getWithDefault0(BoughtBasicAttributePoints.of(_))}),
+
+//    BoughtBasicAttributePoints -> {Subject.getWithDefault0(BoughtBasicAttributePoints.of(_))}, // with implicit
+
+
     // ---
 
 //    BoughtBasicAttributePoints ->
