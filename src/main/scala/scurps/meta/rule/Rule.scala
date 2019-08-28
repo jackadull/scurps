@@ -38,4 +38,5 @@ object Rule {
     override def apply(params:PList[C,P1], context:Derivation[RuleContext]):Derivation[R] =
       context.create.forAny(inner(params.tail, context), concept)
   }
+  private[rule] trait RuleKeyBase[-P<:Params,+R] extends Rule0[Rule[P,R]]
 }

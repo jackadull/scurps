@@ -5,7 +5,7 @@ import scurps.meta.rule.RuleCatalog
 
 package object basic {
   val basicAttributeRules:RuleCatalog = RuleCatalog(
-    BasicAttributeScore -> (FreeAttributeScore.rule :+ BoughtBasicAttributePoints.rule),
+    BasicAttributeScore -> (FreeAttributeScore :+ BoughtBasicAttributePoints),
 //    BoughtBasicAttributePoints ->
 //      BoughtBasicAttributePoints.getFrom(Subject.fromContext).orDefault(Score(0)),
 
