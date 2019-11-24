@@ -1,0 +1,2 @@
+version: ~> 1.0
+import: jackadull/jackadull-build:build-configs/scala-sbt.yml@v0.4.4

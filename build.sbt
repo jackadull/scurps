@@ -1,8 +1,4 @@
-scalaVersion := "2.13.0"
+lazy val jackadull = net.jackadull.build.JackadullBuild.onTravis(name = "scurps", version = "0.1.1-SNAPSHOT",
+  basePackage = "net.jackadull.scurps", capitalizedIdentifier = "Scurps")
 
-lazy val scurps = (project in file ("."))
-  .settings(
-    organization := "net.jackadull",
-    name := "scurps",
-    version := "0.1.1-experimental"
-  )
+lazy val scurpsBuild:Project = project.in(file(".")).configure(jackadull.project)
