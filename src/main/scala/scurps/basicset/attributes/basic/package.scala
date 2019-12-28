@@ -1,12 +1,13 @@
 package scurps.basicset.attributes
 
-import scurps.basicset.attributes.basic.BoughtBasicAttributePoints.Wrapper
+import scurps.basicset.attributes.basic.BoughtBasicAttributePoints.wrapper
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.algebra.ScurpsOpsImplicits._
 import scurps.meta.context.ContextKey.Subject
 import scurps.meta.context.{RuleContext, ValueKey}
+import scurps.meta.data.KeyWrapper.KeyWrapperSupport
+import scurps.meta.data.Score
 import scurps.meta.data.Score.IntScore
-import scurps.meta.data.{KeyWrapper, Score}
 import scurps.meta.rule.Params.ParamsA1
 import scurps.meta.rule.Rule.RuleA1
 import scurps.meta.rule.RuleCatalog
@@ -22,11 +23,9 @@ package object basic {
   case object BasicAttributeScore extends RuleKeyA1[BasicAttribute,IntScore]
 
   final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends ValueKey[IntScore]
-  case object BoughtBasicAttributePoints extends RuleKeyA1[BasicAttribute,IntScore] {
-    // TODO re-structure to a one-liner
-    implicit object Wrapper extends KeyWrapper[BoughtBasicAttributePoints,BasicAttribute] {
-      override def apply(value:BasicAttribute):BoughtBasicAttributePoints = BoughtBasicAttributePoints(value)
-    }
+  case object BoughtBasicAttributePoints extends RuleKeyA1[BasicAttribute,IntScore]
+    with KeyWrapperSupport[BoughtBasicAttributePoints,BasicAttribute] {
+    override def wrap(attr:BasicAttribute):BoughtBasicAttributePoints = BoughtBasicAttributePoints(attr)
   }
 
   case object FreeAttributeScore extends RuleKeyA1[BasicAttribute,IntScore]
