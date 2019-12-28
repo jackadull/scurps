@@ -1,15 +1,13 @@
 package scurps.meta.rule
 
+import scurps.meta.algebra.ScurpsOps
 import scurps.meta.context.RuleContext
-import scurps.meta.derivation.Params.{PNil, Params1}
-import scurps.meta.derivation.{Derivation, Params}
-import scurps.meta.rule.Rule.RuleKeyBase
+import scurps.meta.rule.Params.{ParamsA0, ParamsA1}
 
-trait RuleKey[-P<:Params,+R] extends RuleKeyBase[P,R] {
-  override final def apply(pNil:PNil, context:Derivation[RuleContext]):Derivation[Rule[P,R]] =
-    context.lookupRule(this)
+trait RuleKey[-P[_[_]]<:Params,+R] extends Rule[P,R] {
+  override def apply[A[+_]](params:P[A], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[R] = ??? // TODO
 }
 object RuleKey {
-  type RuleKey0[+R] = RuleKey[PNil,R]
-  type RuleKey1[-T1,+R] = RuleKey[Params1[T1],R]
+  type RuleKeyA0[+R] = RuleKey[({type P[A[+_]]=ParamsA0})#P,R]
+  type RuleKeyA1[-T1, +R] = RuleKey[({type P[A[+_]]=ParamsA1[A[T1]]})#P,R]
 }

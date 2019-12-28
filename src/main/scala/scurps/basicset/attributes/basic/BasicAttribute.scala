@@ -1,12 +1,17 @@
 package scurps.basicset.attributes.basic
 
-import scurps.meta.Concept
-import scurps.meta.Score.IntScore
-import scurps.meta.rule.RuleKey.RuleKey0
+import scurps.meta.algebra.ScurpsOps
+import scurps.meta.algebra.ScurpsOpsImplicits._
+import scurps.meta.context.RuleContext
+import scurps.meta.data.Score.IntScore
+import scurps.meta.rule.Params
+import scurps.meta.rule.Params.ParamsA0
+import scurps.meta.rule.Rule.RuleA0
 
-trait BasicAttribute extends RuleKey0[IntScore]
+trait BasicAttribute extends RuleA0[IntScore] {
+  override def apply[A[+_]](params:ParamsA0, context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
+    BasicAttributeScore(Params(this.constant), context) // TODO maybe p(this.constant) instead of ParamsA(...)
+}
 object BasicAttribute {
   object Strength extends BasicAttribute
-
-  implicit object BasicAttributeConcept extends Concept[BasicAttribute]
 }

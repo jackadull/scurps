@@ -1,6 +1,4 @@
-package scurps.meta
-
-import scala.language.higherKinds
+package scurps.meta.data
 
 trait PMapLike[K[_],+Repr<:PMapLike[K,Repr]] {
   def removed(key:K[_]):Repr

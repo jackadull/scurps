@@ -1,5 +1,3 @@
 package scurps.meta.context
 
-trait ValueKey {
-  // TODO
-}
+trait ValueKey[T]

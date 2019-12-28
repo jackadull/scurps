@@ -1,12 +1,8 @@
-package scurps.meta
+package scurps.meta.data
 
 import scurps.meta.math.Add
-import scurps.meta.rule.Rule
-import scurps.meta.rule.Rule.Rule0
 
-sealed trait Score[+A] extends Any {
-  def asConstant:Rule0[this.type] = Rule.constant(this)
-}
+sealed trait Score[+A] extends Any
 object Score {
   @inline def apply(intValue:Int):IntScore = IntScore(intValue)
 

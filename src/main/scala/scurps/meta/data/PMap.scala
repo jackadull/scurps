@@ -1,6 +1,4 @@
-package scurps.meta
-
-import scala.language.higherKinds
+package scurps.meta.data
 
 /** Polymorphic map, whose value types are derived from the reference keys of type [[K]]. */
 trait PMap[K[_]] extends PMapLike[K,PMap[K]] {
