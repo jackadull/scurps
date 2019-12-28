@@ -31,8 +31,6 @@ package object basic {
 
   case object FreeAttributeScore extends RuleKeyA1[BasicAttribute,IntScore]
 
-  // TODO check if the rules below can be methods of an object
-
   private object BasicAttributeScoreRule extends RuleA1[BasicAttribute,IntScore] {
     override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
       FreeAttributeScore(params, context) :+ BoughtBasicAttributePoints(params, context) // TODO accordingTo
