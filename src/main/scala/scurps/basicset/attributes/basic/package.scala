@@ -15,9 +15,18 @@ import scurps.meta.rule.RuleKey.RuleKeyA1
 
 package object basic {
   val rules:RuleCatalog = RuleCatalog(
-    BasicAttributeScore -> BasicAttributeScoreRule,
-    BoughtBasicAttributePoints -> BoughtBasicAttributePointsRule,
-    FreeAttributeScore -> FreeAttributeScoreRule
+    BasicAttributeScore -> new RuleA1[BasicAttribute,IntScore] {
+      override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
+        FreeAttributeScore(params, context) :+ BoughtBasicAttributePoints(params, context) // TODO accordingTo
+    },
+    BoughtBasicAttributePoints -> new RuleA1[BasicAttribute,IntScore] {
+      override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
+        context.get(Subject).get(params.head).orElse(Score(0).constant) // TODO accordingTo; params._1 (or p1); if there is no subject, result should be undefined
+    },
+    FreeAttributeScore -> new RuleA1[BasicAttribute,IntScore] {
+      override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
+        ops.constant(Score(10)) // TODO accordingTo; Score(10).constant.forAny[BasicAttribute]
+    }
   )
 
   case object BasicAttributeScore extends RuleKeyA1[BasicAttribute,IntScore]
@@ -29,19 +38,4 @@ package object basic {
   }
 
   case object FreeAttributeScore extends RuleKeyA1[BasicAttribute,IntScore]
-
-  private object BasicAttributeScoreRule extends RuleA1[BasicAttribute,IntScore] {
-    override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-      FreeAttributeScore(params, context) :+ BoughtBasicAttributePoints(params, context) // TODO accordingTo
-  }
-
-  private object BoughtBasicAttributePointsRule extends RuleA1[BasicAttribute,IntScore] {
-    override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-      context.get(Subject).get(params.head).orElse(Score(0).constant) // TODO accordingTo; params._1 (or p1); if there is no subject, result should be undefined
-  }
-
-  private object FreeAttributeScoreRule extends RuleA1[BasicAttribute,IntScore] {
-    override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-      ops.constant(Score(10)) // TODO accordingTo; Score(10).constant.forAny[BasicAttribute]
-  }
 }
