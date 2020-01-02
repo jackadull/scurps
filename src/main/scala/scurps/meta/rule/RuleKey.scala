@@ -9,6 +9,6 @@ trait RuleKey[-P[_[_]]<:Params,+R] extends Rule[P,R] {
     ops.applyRuleByKey(this, params, context)
 }
 object RuleKey {
-  type RuleKeyA0[+R] = RuleKey[({type P[A[+_]]=Params0})#P,R]
-  type RuleKeyA1[-T1,+R] = RuleKey[({type P[A[+_]]=Params1[A[T1]]})#P,R]
+  type RuleKey0[+R] = RuleKey[({type P[A[+_]]=Params0})#P,R]
+  type RuleKey1[-T1,+R] = RuleKey[({type P[A[+_]]=Params1[A[T1]]})#P,R]
 }
