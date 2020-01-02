@@ -38,7 +38,7 @@ trait ScurpsOps[A[_]] {
 
   /** Get the value from a given [[PMap]], but first wrap the given value as a key by using the given implicit
    *  [[KeyWrapper]]. If no value for the wrapped key is defined in the given map, the result is undefined. */
-  def getFromPMapWrapped[V,K[_],T](pMap:A[PMap[K]], unwrappedKey:A[V])(implicit wrapper:KeyWrapper[K[T],V]):A[T]
+  def getFromPMapWrapped[V,T,K[_]](pMap:A[PMap[K]], unwrappedKey:A[V])(implicit wrapper:KeyWrapper[V,K[T]]):A[T]
 
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue:A[T]):A[T]

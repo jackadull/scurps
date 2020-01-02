@@ -3,7 +3,7 @@ package scurps.basicset.attributes.basic
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.algebra.ScurpsOpsImplicits._
 import scurps.meta.context.{RuleContext, ValueKey}
-import scurps.meta.data.KeyWrapper.KeyWrapperSupport
+import scurps.meta.data.KeyWrapper
 import scurps.meta.data.Score.IntScore
 import scurps.meta.rule.Params
 import scurps.meta.rule.Params.ParamsA0
@@ -16,14 +16,13 @@ trait BasicAttribute extends RuleA0[IntScore] {
 }
 object BasicAttribute {
   object Strength extends BasicAttribute
+
+  implicit val wrapBought:KeyWrapper[BasicAttribute,BoughtBasicAttributePoints] = BoughtBasicAttributePoints(_)
 }
 
 case object BasicAttributeScore extends RuleKeyA1[BasicAttribute,IntScore]
 
 final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends ValueKey[IntScore]
 case object BoughtBasicAttributePoints extends RuleKeyA1[BasicAttribute,IntScore]
-  with KeyWrapperSupport[BoughtBasicAttributePoints,BasicAttribute] {
-  override def wrap(attr:BasicAttribute):BoughtBasicAttributePoints = BoughtBasicAttributePoints(attr)
-}
 
 case object FreeAttributeScore extends RuleKeyA1[BasicAttribute,IntScore]

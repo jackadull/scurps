@@ -1,6 +1,5 @@
 package scurps.basicset.attributes
 
-import scurps.basicset.attributes.basic.BoughtBasicAttributePoints.wrapper
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.algebra.ScurpsOpsImplicits._
 import scurps.meta.context.ContextKey.Subject

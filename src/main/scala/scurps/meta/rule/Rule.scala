@@ -2,7 +2,6 @@ package scurps.meta.rule
 
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.context.RuleContext
-import scurps.meta.math.Add
 import scurps.meta.rule.Params.{ParamsA0, ParamsA1, ParamsA2, ParamsA3}
 
 trait Rule[-P[_[_]]<:Params,+R] {
