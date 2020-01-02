@@ -6,12 +6,12 @@ import scurps.meta.context.{RuleContext, ValueKey}
 import scurps.meta.data.Score.IntScore
 import scurps.meta.data.WrapKey
 import scurps.meta.rule.Params
-import scurps.meta.rule.Params.ParamsA0
+import scurps.meta.rule.Params.Params0
 import scurps.meta.rule.Rule.RuleA0
 import scurps.meta.rule.RuleKey.RuleKeyA1
 
 trait BasicAttribute extends RuleA0[IntScore] {
-  override def apply[A[+_]](params:ParamsA0, context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
+  override def apply[A[+_]](params:Params0, context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
     BasicAttributeScore(Params(this.constant), context) // TODO maybe p(this.constant) instead of ParamsA(...)
 }
 object BasicAttribute {
