@@ -24,4 +24,3 @@ trait ScurpsOpsImplicits {
     @inline def constant[A[_]](implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
   }
 }
-object ScurpsOpsImplicits extends ScurpsOpsImplicits

@@ -1,7 +1,7 @@
 package scurps.basicset.attributes
 
+import scurps._
 import scurps.meta.algebra.ScurpsOps
-import scurps.meta.algebra.ScurpsOpsImplicits._
 import scurps.meta.context.ContextKey.Subject
 import scurps.meta.context.RuleContext
 import scurps.meta.data.Score
