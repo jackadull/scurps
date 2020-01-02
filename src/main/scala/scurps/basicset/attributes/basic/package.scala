@@ -18,7 +18,7 @@ package object basic {
     },
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](params:Params1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        context.get(Subject).get(params.head).orElse(Score(0).constant) // TODO accordingTo; params._1 (or p1); if there is no subject, result should be undefined
+        context.get(Subject).get(params._1).orElse(Score(0).constant) // TODO accordingTo; if there is no subject, result should be undefined
     },
     FreeAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](params:Params1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
