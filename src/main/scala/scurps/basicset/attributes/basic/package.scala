@@ -12,7 +12,7 @@ import scurps.meta.rule.Rule.RuleA1
 import scurps.meta.rule.RuleCatalog
 
 package object basic {
-  val rules:RuleCatalog = RuleCatalog(
+  val basicSetRules:RuleCatalog = RuleCatalog(
     BasicAttributeScore -> new RuleA1[BasicAttribute,IntScore] {
       override def apply[A[+_]](params:ParamsA1[A[BasicAttribute]], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
         FreeAttributeScore(params, context) :+ BoughtBasicAttributePoints(params, context) // TODO accordingTo
