@@ -1,7 +1,7 @@
 package scurps.meta.algebra
 
 import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.{KeyWrapper, PMap}
+import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.math.Add
 
 trait ScurpsOpsImplicits {
@@ -16,7 +16,7 @@ trait ScurpsOpsImplicits {
 
   final implicit class RichAlgebraicPMap[A[+_],K[_]](v:A[PMap[K]]) {
     @inline def get[T](key:K[T])(implicit ops:ScurpsOps[A]):A[T] = ops.getFromPMap(v, key)
-    @inline def get[T,V](valueToWrap:A[V])(implicit wrapper:KeyWrapper[V,K[T]], ops:ScurpsOps[A]):A[T] =
+    @inline def get[T,V](valueToWrap:A[V])(implicit wrapKey:WrapKey[V,K[T]], ops:ScurpsOps[A]):A[T] =
       ops.getFromPMapWrapped(v, valueToWrap)
   }
 
