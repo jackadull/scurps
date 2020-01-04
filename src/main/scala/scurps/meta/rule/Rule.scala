@@ -1,11 +1,11 @@
 package scurps.meta.rule
 
 import scurps.meta.algebra.ScurpsOps
-import scurps.meta.context.RuleContext
+import scurps.meta.context.GameContext
 import scurps.meta.rule.Params.{Params0, Params1, Params2, Params3}
 
 trait Rule[-P[_[_]]<:Params,+R] {
-  def apply[A[+_]](params:P[A], context:A[RuleContext])(implicit ops:ScurpsOps[A]):A[R]
+  def apply[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 }
 object Rule {
   type Rule0[+R] = Rule[({type P[A[+_]]=Params0})#P,R]

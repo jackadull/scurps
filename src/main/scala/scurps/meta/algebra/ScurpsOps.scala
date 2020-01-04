@@ -1,7 +1,7 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.context.{ContextKey, GameContext, RuleContext}
+import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.math.Add
 import scurps.meta.rule.{Params, RuleKey}
@@ -24,7 +24,7 @@ trait ScurpsOps[A[_]] {
 
   /** Calculate the result of the rule denoted by the given key, with the given parameters. If no rule is found in the
    * context's catalog for that key, or if the context is undefined, the result is undefined. */
-  def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[RuleContext]):A[R]
+  def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext]):A[R]
 
   /** @return the given value wrapped in a [[A]]. */
   def constant[T](value:T):A[T]
