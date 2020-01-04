@@ -26,7 +26,7 @@ package object basic {
     },
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](params:Params2[A[BasicAttribute],A[IntScore]], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] =
-        ??? // TODO implement
+        context.mod(Subject) {_.updated()}
     }
   )
 }
