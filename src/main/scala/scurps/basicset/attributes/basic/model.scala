@@ -16,17 +16,20 @@ trait BasicAttribute extends Rule0[IntScore] {
     override def apply[A[+_]](params:Params1[A[IntScore]], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] =
       SetBasicAttribute(p(BasicAttribute.this.constant, params._1), context)
   }
+
+  private[basic] val boughtPointsKey:BoughtBasicAttributePoints = new BoughtBasicAttributePoints(this)
 }
 object BasicAttribute {
   object Strength extends BasicAttribute
-
-  implicit val wrapBought:WrapKey[BasicAttribute,BoughtBasicAttributePoints] = BoughtBasicAttributePoints(_)
 }
 
 case object BasicAttributeScore extends RuleKey1[BasicAttribute,IntScore]
 
 final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends ValueKey[IntScore]
-case object BoughtBasicAttributePoints extends RuleKey1[BasicAttribute,IntScore]
+case object BoughtBasicAttributePoints
+extends RuleKey1[BasicAttribute,IntScore] with WrapKey[BasicAttribute,BoughtBasicAttributePoints] {
+  override def apply(attribute:BasicAttribute):BoughtBasicAttributePoints = attribute.boughtPointsKey
+}
 
 case object FreeAttributeScore extends RuleKey1[BasicAttribute,IntScore]
 

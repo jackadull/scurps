@@ -20,12 +20,8 @@ trait ScurpsOpsImplicits {
   }
 
   final implicit class RichAlgebraicPMap[A[+_],K[_]](v:A[PMap[K]]) {
-    @inline def get[T](key:K[T])(implicit ops:ScurpsOps[A]):A[T] = ops.getFromPMap(v, key)
-    // TODO implicit WrapKey implies the danger of picking the wrong one
-    @inline def get[W,T](keyToWrap:A[W])(implicit wrapKey:WrapKey[W,K[T]], ops:ScurpsOps[A]):A[T] =
-      ops.getFromPMapWrapped(v, keyToWrap)
+    @inline def get[T](key:A[K[T]])(implicit ops:ScurpsOps[A]):A[T] = ops.getFromPMap(v, key)
     @inline def updated[T](key:A[K[T]], value:A[T])(implicit ops:ScurpsOps[A]):A[PMap[K]] = ??? // TODO implement
-    @inline def updated[W,T](keyToWrap:A[W], value:A[T])(implicit wrapKey:WrapKey[W,K[T]], ops:ScurpsOps[A]):A[PMap[K]] = ??? // TODO
   }
 
   final implicit class RichAny[T](v:T) {

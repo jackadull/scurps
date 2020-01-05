@@ -19,7 +19,7 @@ package object basic {
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](params:Params1[A[BasicAttribute]], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] = {
         val Params1(attribute) = params
-        context.get(Subject).ifDefined(_.get(attribute).orElse(Score(0).constant)) // TODO accordingTo
+        context.get(Subject).ifDefined(_.get(BoughtBasicAttributePoints.of(attribute)).orElse(Score(0).constant)) // TODO accordingTo
       }
     },
     FreeAttributeScore -> new Rule1[BasicAttribute,IntScore] {
@@ -30,7 +30,8 @@ package object basic {
       override def apply[A[+_]](params:Params2[A[BasicAttribute],A[IntScore]], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
         val Params2(attribute, newScore) = params
         val newBoughtPoints = newScore :- FreeAttributeScore(p(attribute), context)
-        context.mod(Subject) {_.updated(attribute, newBoughtPoints)} // TODO delete if zero; accordingTo
+        val boughtPointsKey = BoughtBasicAttributePoints.of(attribute)
+        context.mod(Subject) {_.updated(boughtPointsKey, newBoughtPoints)} // TODO delete if zero; accordingTo
       }
     }
   )

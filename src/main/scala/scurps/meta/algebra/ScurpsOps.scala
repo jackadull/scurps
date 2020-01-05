@@ -2,7 +2,7 @@ package scurps.meta.algebra
 
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.{PMap, WrapKey}
+import scurps.meta.data.PMap
 import scurps.meta.math.Add
 import scurps.meta.rule.{Params, RuleKey}
 
@@ -34,11 +34,8 @@ trait ScurpsOps[A[_]] {
 
   /** Get a value from a given [[PMap]], denoted by the value key. If the map does not contain a value for the key, the
    * result is undefined. */
-  def getFromPMap[K[_],T](pMap:A[PMap[K]], key:K[T]):A[T]
+  def getFromPMap[K[_],T](pMap:A[PMap[K]], key:A[K[T]]):A[T]
 
-  /** Get the value from a given [[PMap]], but first wrap the given value as a key by using the given implicit
-   *  [[WrapKey]]. If no value for the wrapped key is defined in the given map, the result is undefined. */
-  def getFromPMapWrapped[V,T,K[_]](pMap:A[PMap[K]], unwrappedKey:A[V])(implicit wrapKey:WrapKey[V,K[T]]):A[T]
 
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue:A[T]):A[T]
