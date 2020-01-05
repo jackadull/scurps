@@ -7,9 +7,9 @@ import scurps.meta.math.{Add, Subtract}
 import scurps.meta.rule.{Params, RuleKey}
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
- * constructor [[A]]. It is intentional that it is impossible to "unwrap" a [[A]] instance to get hold of its contents.
- * Users of [[ScurpsOps]] are forced to use the provided operations in order to manipulate the contents of a [[A]]. Some
- * [[ScurpsOps]] implementations might not even calculate the contained value, for example when just describing the
+ * constructor [[A]]. It is intentional that it is impossible to "unwrap" an [[A]] instance to get hold of its contents.
+ * Users of [[ScurpsOps]] are forced to use the provided operations in order to manipulate the contents of an [[A]].
+ * Some [[ScurpsOps]] implementations might not even calculate the contained value, for example when just describing the
  * operations, in order to make them human readable.
  *
  * Formally, this is an algebra. It is intended to be passed around implicitly. */
