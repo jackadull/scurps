@@ -2,8 +2,8 @@ package scurps.meta.algebra
 
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.PMap
-import scurps.meta.math.Add
+import scurps.meta.data.{PMap, WrapKey}
+import scurps.meta.math.{Add, Subtract}
 import scurps.meta.rule.{Params, RuleKey}
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -14,12 +14,11 @@ import scurps.meta.rule.{Params, RuleKey}
  *
  * Formally, this is an algebra. It is intended to be passed around implicitly. */
 trait ScurpsOps[A[_]] {
-
   /** Attach a bibliographic reference to the given value. The reference denotes the place where the rule is described
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
 
-  /** @return mathematical addition of the two given values. */
+  /** Mathematical addition of the two given values. */
   def added[T](value1:A[T], value2:A[T])(implicit add:Add[T]):A[T]
 
   /** Calculate the result of the rule denoted by the given key, with the given parameters. If no rule is found in the
@@ -36,7 +35,12 @@ trait ScurpsOps[A[_]] {
    * result is undefined. */
   def getFromPMap[K[_],T](pMap:A[PMap[K]], key:A[K[T]]):A[T]
 
-
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue:A[T]):A[T]
+
+  /** Mathematical subtraction of the two given values. */
+  def subtracted[T](value1:A[T], value2:A[T])(implicit subtract:Subtract[T]):A[T]
+
+  /** Wrap the given value in a key that can be looked up in a [[PMap]]. */
+  def wrapKey[T,K](value:A[T], wrap:WrapKey[T,K]):A[K]
 }

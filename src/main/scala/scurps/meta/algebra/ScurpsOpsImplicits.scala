@@ -9,7 +9,7 @@ trait ScurpsOpsImplicits {
 
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def :+(rhs:A[T])(implicit add:Add[T], ops:ScurpsOps[A]):A[T] = ops.added(v, rhs)
-    @inline def :-(rhs:A[T])(implicit subtract:Subtract[T], ops:ScurpsOps[A]):A[T] = ??? // TODO implement
+    @inline def :-(rhs:A[T])(implicit subtract:Subtract[T], ops:ScurpsOps[A]):A[T] = ops.subtracted(v, rhs)
     @inline def ifDefined[T2](_then:A[T]=>A[T2]):A[T2] = ??? // TODO implement
     @inline def ifZero[T2](_then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2] = ??? // TODO implement
     @inline def orElse(defaultValue:A[T])(implicit ops:ScurpsOps[A]):A[T] = ops.orElse(v, defaultValue)
