@@ -3,7 +3,7 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.math.{Add, Subtract}
+import scurps.meta.math.{Add, IsZero, Subtract}
 import scurps.meta.rule.{Params, RuleKey}
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -25,7 +25,7 @@ trait ScurpsOps[A[_]] {
    * context's catalog for that key, or if the context is undefined, the result is undefined. */
   def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext]):A[R]
 
-  /** @return the given value wrapped in a [[A]]. */
+  /** Wrap the given value in [[A]]. */
   def constant[T](value:T):A[T]
 
   /** Get a context value denoted by key. Is undefined if no value is defined for the key in the context. */
@@ -35,11 +35,29 @@ trait ScurpsOps[A[_]] {
    * result is undefined. */
   def getFromPMap[K[_],T](pMap:A[PMap[K]], key:A[K[T]]):A[T]
 
+  /** If the given is defined, the given `_then` gets applied to it, returning the result. Otherwise, the result is
+   * undefined. */
+  def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2]
+
+  /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
+  def ifZero[T,T2](value:A[T], _then: =>A[T2], _else:A[T2])(implicit isZero:IsZero[T]):A[T2]
+
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue:A[T]):A[T]
 
+  /** Modify the given context, by applying the given function to the value stored for the given context key, returning
+   * a new context in which the new value is stored. If the value is not defined in the context, the result is
+   * undefined. */
+  def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
+
+  /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no
+   * entry for the key, return the map unchanged. */
+  def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K]):A[PMap[K]]
+
   /** Mathematical subtraction of the two given values. */
   def subtracted[T](value1:A[T], value2:A[T])(implicit subtract:Subtract[T]):A[T]
+
+  def updatedInPMap[T,K[_]](pMap:A[PMap[K]], key:A[K[T]], value:A[T]):A[PMap[K]]
 
   /** Wrap the given value in a key that can be looked up in a [[PMap]]. */
   def wrapKey[T,K](value:A[T], wrap:WrapKey[T,K]):A[K]
