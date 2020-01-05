@@ -1,8 +1,8 @@
 package scurps.meta.algebra
 
 import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.math.{Add, Subtract}
+import scurps.meta.data.PMap
+import scurps.meta.math.{Add, IsZero, Subtract}
 
 trait ScurpsOpsImplicits {
   // TODO lazy parameters for conditional evaluation (also in ScurpsOps)
@@ -10,7 +10,8 @@ trait ScurpsOpsImplicits {
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def :+(rhs:A[T])(implicit add:Add[T], ops:ScurpsOps[A]):A[T] = ops.added(v, rhs)
     @inline def :-(rhs:A[T])(implicit subtract:Subtract[T], ops:ScurpsOps[A]):A[T] = ??? // TODO implement
-    @inline def ifDefined[T2](_then: A[T]=>A[T2]):A[T2] = ??? // TODO implement
+    @inline def ifDefined[T2](_then:A[T]=>A[T2]):A[T2] = ??? // TODO implement
+    @inline def ifZero[T2](_then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2] = ??? // TODO implement
     @inline def orElse(defaultValue:A[T])(implicit ops:ScurpsOps[A]):A[T] = ops.orElse(v, defaultValue)
   }
 
@@ -21,6 +22,7 @@ trait ScurpsOpsImplicits {
 
   final implicit class RichAlgebraicPMap[A[+_],K[_]](v:A[PMap[K]]) {
     @inline def get[T](key:A[K[T]])(implicit ops:ScurpsOps[A]):A[T] = ops.getFromPMap(v, key)
+    @inline def removed(key:A[K[_]]):A[PMap[K]] = ??? // TODO implement
     @inline def updated[T](key:A[K[T]], value:A[T])(implicit ops:ScurpsOps[A]):A[PMap[K]] = ??? // TODO implement
   }
 

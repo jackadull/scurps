@@ -31,7 +31,10 @@ package object basic {
         val Params2(attribute, newScore) = params
         val newBoughtPoints = newScore :- FreeAttributeScore(p(attribute), context)
         val boughtPointsKey = BoughtBasicAttributePoints.of(attribute)
-        context.mod(Subject) {_.updated(boughtPointsKey, newBoughtPoints)} // TODO delete if zero; accordingTo
+        newBoughtPoints.ifZero(
+          _then = context.mod(Subject) {_.removed(boughtPointsKey)},
+          _else = context.mod(Subject) {_.updated(boughtPointsKey, newBoughtPoints)}
+        ) // TODO accordingTo; the ifZero construct might become a useful implicit
       }
     }
   )
