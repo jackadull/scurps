@@ -5,9 +5,12 @@ import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.math.{Add, Subtract}
 
 trait ScurpsOpsImplicits {
+  // TODO lazy parameters for conditional evaluation (also in ScurpsOps)
+
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def :+(rhs:A[T])(implicit add:Add[T], ops:ScurpsOps[A]):A[T] = ops.added(v, rhs)
     @inline def :-(rhs:A[T])(implicit subtract:Subtract[T], ops:ScurpsOps[A]):A[T] = ??? // TODO implement
+    @inline def ifDefined[T2](_then: A[T]=>A[T2]):A[T2] = ??? // TODO implement
     @inline def orElse(defaultValue:A[T])(implicit ops:ScurpsOps[A]):A[T] = ops.orElse(v, defaultValue)
   }
 
