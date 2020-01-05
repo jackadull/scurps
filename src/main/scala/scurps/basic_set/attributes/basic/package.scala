@@ -1,4 +1,4 @@
-package scurps.basicset.attributes
+package scurps.basic_set.attributes
 
 import scurps._
 import scurps.meta.algebra.ScurpsOps

@@ -1,4 +1,4 @@
-package scurps.basicset.bib
+package scurps.basic_set.bib
 
 import scurps.bib.BibRef.WorkRef
 import scurps.bib.Work

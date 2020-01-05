@@ -1,4 +1,4 @@
-package scurps.basicset.attributes.basic
+package scurps.basic_set.attributes.basic
 
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.context.{GameContext, ValueKey}
