@@ -40,10 +40,10 @@ trait ScurpsOps[A[_]] {
   def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2]
 
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
-  def ifZero[T,T2](value:A[T], _then: =>A[T2], _else:A[T2])(implicit isZero:IsZero[T]):A[T2]
+  def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
-  def orElse[T](value:A[T], defaultValue:A[T]):A[T]
+  def orElse[T](value:A[T], defaultValue: =>A[T]):A[T]
 
   /** Modify the given context, by applying the given function to the value stored for the given context key, returning
    * a new context in which the new value is stored. If the value is not defined in the context, the result is
@@ -57,6 +57,8 @@ trait ScurpsOps[A[_]] {
   /** Mathematical subtraction of the two given values. */
   def subtracted[T](value1:A[T], value2:A[T])(implicit subtract:Subtract[T]):A[T]
 
+  /** Update the entry for the given key in the [[PMap]], returning the modified map. If there already is a value
+   * stored for the key, it gets overwritten. Otherwise, a new entry is added. */
   def updatedInPMap[T,K[_]](pMap:A[PMap[K]], key:A[K[T]], value:A[T]):A[PMap[K]]
 
   /** Wrap the given value in a key that can be looked up in a [[PMap]]. */

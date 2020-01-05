@@ -5,15 +5,13 @@ import scurps.meta.data.PMap
 import scurps.meta.math.{Add, IsZero, Subtract}
 
 trait ScurpsOpsImplicits {
-  // TODO lazy parameters for conditional evaluation (also in ScurpsOps)
-
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def :+(rhs:A[T])(implicit add:Add[T], ops:ScurpsOps[A]):A[T] = ops.added(v, rhs)
     @inline def :-(rhs:A[T])(implicit subtract:Subtract[T], ops:ScurpsOps[A]):A[T] = ops.subtracted(v, rhs)
     @inline def ifDefined[T2](_then:A[T]=>A[T2])(implicit ops:ScurpsOps[A]):A[T2] = ops.ifDefined(v, _then)
     @inline def ifZero[T2](_then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T], ops:ScurpsOps[A]):A[T2] =
       ops.ifZero(v, _then, _else)
-    @inline def orElse(defaultValue:A[T])(implicit ops:ScurpsOps[A]):A[T] = ops.orElse(v, defaultValue)
+    @inline def orElse(defaultValue: =>A[T])(implicit ops:ScurpsOps[A]):A[T] = ops.orElse(v, defaultValue)
   }
 
   final implicit class RichAlgebraicContext[A[+_]](v:A[GameContext]) {
