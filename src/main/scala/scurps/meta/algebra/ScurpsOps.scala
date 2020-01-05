@@ -52,7 +52,7 @@ trait ScurpsOps[A[_]] {
 
   /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no
    * entry for the key, return the map unchanged. */
-  def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K]):A[PMap[K]]
+  def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]]
 
   /** Mathematical subtraction of the two given values. */
   def subtracted[T](value1:A[T], value2:A[T])(implicit subtract:Subtract[T]):A[T]
