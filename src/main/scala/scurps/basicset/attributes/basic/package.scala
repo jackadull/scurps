@@ -22,7 +22,7 @@ package object basic {
     },
     FreeAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](params:Params1[A[BasicAttribute]], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        ops.constant(Score(10)) // TODO accordingTo; Score(10).constant.forAny[BasicAttribute]
+        ops.constant(Score(10)) // TODO accordingTo; Score(10).constant.forAny[BasicAttribute]; undefined when no subject
     },
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](params:Params2[A[BasicAttribute],A[IntScore]], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
