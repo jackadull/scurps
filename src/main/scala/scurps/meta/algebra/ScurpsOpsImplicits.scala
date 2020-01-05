@@ -27,7 +27,7 @@ trait ScurpsOpsImplicits {
       ops.updatedInPMap(v, key, value)
   }
 
-  final implicit class RichAny[T](v:T) {
-    @inline def constant[A[_]](implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
+  final implicit class RichAny[+T](v:T) {
+    @inline def constant[A[+_]](implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
   }
 }

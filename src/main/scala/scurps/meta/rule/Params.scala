@@ -2,6 +2,7 @@ package scurps.meta.rule
 
 sealed trait Params extends Any
 object Params {
+  // TODO this syntactic sugar should be imported with scurps._
   @inline def p[T1](p1:T1):Params1[T1] = PCons(p1, PNil)
   @inline def p[T1,T2](p1:T1, p2:T2):Params2[T1,T2] = PCons(p1, PCons(p2, PNil))
 
