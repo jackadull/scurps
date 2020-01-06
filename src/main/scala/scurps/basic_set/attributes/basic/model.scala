@@ -26,6 +26,7 @@ object BasicAttribute {
 case object BasicAttributeScore extends RuleKey1[BasicAttribute,IntScore]
 
 final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends ValueKey[IntScore]
+// TODO produces "<function1>" as `toString`: create a better `toString` for all rule keys (and maybe value keys)
 case object BoughtBasicAttributePoints
 extends RuleKey1[BasicAttribute,IntScore] with WrapKey[BasicAttribute,BoughtBasicAttributePoints] {
   override def apply(attribute:BasicAttribute):BoughtBasicAttributePoints = attribute.boughtPointsKey
