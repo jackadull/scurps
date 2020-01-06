@@ -4,6 +4,7 @@ import scurps.meta.algebra.ScurpsOps
 import scurps.meta.context.GameContext
 import scurps.meta.rule.Params.{Params0, Params1, Params2, Params3}
 
+// TODO consider easy to use implicit apply methods, maybe renaming `Rule.apply`
 trait Rule[-P[_[_]]<:Params,+R] {
   def apply[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 }

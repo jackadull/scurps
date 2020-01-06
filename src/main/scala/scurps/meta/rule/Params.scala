@@ -1,5 +1,7 @@
 package scurps.meta.rule
 
+// TODO consider adding the context to the params
+// TODO consider unifying context and params
 sealed trait Params extends Any
 object Params {
   // TODO this syntactic sugar should be imported with scurps._
