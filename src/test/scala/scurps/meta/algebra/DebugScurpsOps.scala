@@ -38,7 +38,7 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def added[T](value1:A[T], value2:A[T])(implicit add:Add[T]):A[T] =
     debug("added", s"value1=$value1, value2=$value2", base.added(value1, value2))
 
-  override def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext]):A[R] =
+  override def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
     debug("applyRuleByKey", s"key=$key, params=${debugFmt(params)}, context=$context", base.applyRuleByKey(key, params, context))
 
   override def constant[T](value:T):A[T] =

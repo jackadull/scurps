@@ -22,8 +22,11 @@ trait ScurpsOps[A[_]] {
   def added[T](value1:A[T], value2:A[T])(implicit add:Add[T]):A[T]
 
   /** Calculate the result of the rule denoted by the given key, with the given parameters. If no rule is found in the
-   * context's catalog for that key, or if the context is undefined, the result is undefined. */
-  def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext]):A[R]
+   * context's catalog for that key, or if the context is undefined, the result is undefined.
+   *
+   * The implicit [[ScurpsOps]] is passed so that the implementation can pass on the top-level ops instance to the
+   * invoked rule. */
+  def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 
   /** Wrap the given value in [[A]]. */
   def constant[T](value:T):A[T]
