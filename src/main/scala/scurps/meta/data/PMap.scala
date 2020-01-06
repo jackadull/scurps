@@ -22,7 +22,7 @@ object PMap {
     override def isEmpty:Boolean = baseMap.isEmpty
     override def removed(key:K[_]):Repr = if(contains(key)) withBaseMap(baseMap - key) else this
     override def updated[V](key:K[V], value:V):Repr = baseMap.get(key) match {
-      case Some(`value`) | None => this
+      case Some(`value`) => this
       case _ => withBaseMap(baseMap.updated(key, value))
     }
     // TODO toString
