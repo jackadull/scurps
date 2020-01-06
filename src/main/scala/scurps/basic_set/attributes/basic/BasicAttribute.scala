@@ -1,12 +1,10 @@
 package scurps.basic_set.attributes.basic
 
 import scurps.meta.algebra.ScurpsOps
-import scurps.meta.context.{GameContext, ValueKey}
+import scurps.meta.context.GameContext
 import scurps.meta.data.Score.IntScore
-import scurps.meta.data.WrapKey
 import scurps.meta.rule.Params.{Params0, Params1, p}
 import scurps.meta.rule.Rule.{Rule0, Rule1}
-import scurps.meta.rule.RuleKey.{RuleKey1, RuleKey2}
 
 trait BasicAttribute extends Rule0[IntScore] {
   override def apply[A[+_]](params:Params0, context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
@@ -22,16 +20,3 @@ trait BasicAttribute extends Rule0[IntScore] {
 object BasicAttribute {
   object Strength extends BasicAttribute
 }
-
-case object BasicAttributeScore extends RuleKey1[BasicAttribute,IntScore]
-
-final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends ValueKey[IntScore]
-// TODO produces "<function1>" as `toString`: create a better `toString` for all rule keys (and maybe value keys)
-case object BoughtBasicAttributePoints
-extends RuleKey1[BasicAttribute,IntScore] with WrapKey[BasicAttribute,BoughtBasicAttributePoints] {
-  override def apply(attribute:BasicAttribute):BoughtBasicAttributePoints = attribute.boughtPointsKey
-}
-
-case object FreeAttributeScore extends RuleKey1[BasicAttribute,IntScore]
-
-case object SetBasicAttribute extends RuleKey2[BasicAttribute,IntScore,GameContext]
