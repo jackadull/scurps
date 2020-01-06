@@ -1,6 +1,6 @@
 package scurps.meta.rule
 
-import scala.language.{existentials, higherKinds}
+import scala.language.existentials
 
 trait RuleCatalog {
   def +[P[_[_]]<:Params,R](kv:(RuleKey[P,R],Rule[P,R])):RuleCatalog

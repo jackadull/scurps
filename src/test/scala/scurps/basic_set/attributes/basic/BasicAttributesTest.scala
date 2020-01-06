@@ -26,5 +26,14 @@ class BasicAttributesTest extends FreeSpec with Matchers {
     val context = GameContext.basicSet.updated(Subject, PMap.empty).constant
     "Strength is 10." in
       {Strength(PNil, context) should be (Some(Score(10)))}
+    "Bought strenght points is 0." in
+      {BoughtBasicAttributePoints(p(Strength.constant), context) should be (Some(Score(0)))}
+    "Free strength points is 10." in
+      {FreeAttributeScore(p(Strength.constant), context) should be (Some(Score(10)))}
+    "After setting strength to 8, it remains 8." in {
+      val str8 = Strength.set(p(Score(8).constant), context)
+      str8.get.get(Subject).get.get(BoughtBasicAttributePoints(Strength)) should be (Some(Score(-2)))
+      Strength(PNil, str8) should be (Some(Score(8)))
+    }
   }
 }

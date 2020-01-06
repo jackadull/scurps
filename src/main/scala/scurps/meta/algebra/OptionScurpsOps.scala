@@ -30,7 +30,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def ifZero[T,T2](value:Option[T], _then: =>Option[T2], _else: =>Option[T2])(implicit isZero:IsZero[T]):Option[T2] =
     value match {
       case Some(v) if isZero(v) => _then
-      case Some(_) => _then
+      case Some(_) => _else
       case None => None
     }
 
