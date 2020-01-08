@@ -6,8 +6,7 @@ import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.math.{Add, IsZero, Subtract}
-import scurps.meta.rule.Params.{PCons, PNil}
-import scurps.meta.rule.{Params, RuleKey}
+import scurps.meta.rule.RuleKey
 
 class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   private val indentation = new AtomicInteger(0)
@@ -23,14 +22,7 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
     indented(s"[$opNumber] $op = $result\n")
     result
   }
-  private def debugFmt(params:Params):String = {
-    def recurse(ps:Params):String = ps match {
-      case PNil => ""
-      case PCons(h, t@PCons(_,_)) => s"$h, ${recurse(t)}"
-      case PCons(h, PNil) => s"$h"
-    }
-    s"p(${recurse(params)})"
-  }
+  private def debugFmtParams(params:Any):String = s"$params"
 
   override def accordingTo[T](value:A[T], ref:BibRef):A[T] =
     debug("accordingTo", s"value=$value, ref=$ref", base.accordingTo(value, ref))
@@ -38,8 +30,8 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def added[T](value1:A[T], value2:A[T])(implicit add:Add[T]):A[T] =
     debug("added", s"value1=$value1, value2=$value2", base.added(value1, value2))
 
-  override def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
-    debug("applyRuleByKey", s"key=$key, params=${debugFmt(params)}, context=$context", base.applyRuleByKey(key, params, context))
+  override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
+    debug("applyRuleByKey", s"key=$key, params=${debugFmtParams(params)}, context=$context", base.applyRuleByKey(key, params, context))
 
   override def constant[T](value:T):A[T] =
     debug("constant", s"value=$value", base.constant(value))

@@ -4,7 +4,7 @@ import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.math.{Add, IsZero, Subtract}
-import scurps.meta.rule.{Params, RuleKey}
+import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
  * constructor [[A]]. It is intentional that it is impossible to "unwrap" an [[A]] instance to get hold of its contents.
@@ -26,7 +26,7 @@ trait ScurpsOps[A[_]] {
    *
    * The implicit [[ScurpsOps]] is passed so that the implementation can pass on the top-level ops instance to the
    * invoked rule. */
-  def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
+  def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 
   /** Wrap the given value in [[A]]. */
   def constant[T](value:T):A[T]

@@ -3,7 +3,7 @@ import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.math.{Add, IsZero, Subtract}
-import scurps.meta.rule.{Params, RuleKey}
+import scurps.meta.rule.RuleKey
 
 object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
@@ -11,7 +11,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def added[T](value1:Option[T], value2:Option[T])(implicit add:Add[T]):Option[T] =
     for(v1<-value1; v2<-value2) yield add(v1, v2)
 
-  override def applyRuleByKey[P[_[_]]<:Params,R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
+  override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule(params, context)) yield result
 
   override def constant[T](value:T):Some[T] = Some(value)

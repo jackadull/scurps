@@ -28,6 +28,7 @@ trait ScurpsOpsImplicits {
   }
 
   final implicit class RichAny[+T](v:T) {
+    // TODO maybe replace with implicit conversion, or rename to `pure`
     @inline def constant[A[+_]](implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
   }
 }
