@@ -13,7 +13,7 @@ class BasicAttributesTest extends FreeSpec with Matchers {
 
   "When there is no subject:" - {
     "Strength is undefined." in
-      {Strength((), GameContext.basicSet.constant) should be (None)}
+      {Strength(GameContext.basicSet.constant) should be (None)}
     "Bought strength points is undefined." in
       {BoughtBasicAttributePoints(Strength.constant, GameContext.basicSet.constant) should be (None)}
     "Free strength points is undefined." in
@@ -24,14 +24,14 @@ class BasicAttributesTest extends FreeSpec with Matchers {
   "For an empty subject" - {
     val context = GameContext.basicSet.updated(Subject, PMap.empty).constant
     "Strength is 10." in
-      {Strength((), context) should be (Some(Score(10)))}
+      {Strength(context) should be (Some(Score(10)))}
     "Bought strenght points is 0." in
       {BoughtBasicAttributePoints(Strength.constant, context) should be (Some(Score(0)))}
     "Free strength points is 10." in
       {FreeAttributeScore(Strength.constant, context) should be (Some(Score(10)))}
     "After setting strength to 8, it remains 8." in {
       val str8 = Strength.set(Score(8).constant, context)
-      Strength((), str8) should be (Some(Score(8)))
+      Strength(str8) should be (Some(Score(8)))
     }
   }
 }

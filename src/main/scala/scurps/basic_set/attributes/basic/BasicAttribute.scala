@@ -6,12 +6,12 @@ import scurps.meta.data.Score.IntScore
 import scurps.meta.rule.Rule.{Rule0, Rule1}
 
 trait BasicAttribute extends Rule0[IntScore] {
-  override def apply[A[+_]](params:Unit, context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
+  override def apply[A[+_]](context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
     BasicAttributeScore(this.constant, context)
 
   val set:Rule1[IntScore,GameContext] = new Rule1[IntScore,GameContext] {
     override def apply[A[+_]](newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] =
-      SetBasicAttribute((BasicAttribute.this.constant, newScore), context)
+      SetBasicAttribute(BasicAttribute.this.constant, newScore, context)
   }
 
   private[basic] val boughtPointsKey:BoughtBasicAttributePoints = new BoughtBasicAttributePoints(this)

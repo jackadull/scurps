@@ -12,7 +12,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     for(v1<-value1; v2<-value2) yield add(v1, v2)
 
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
-    for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule(params, context)) yield result
+    for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule.applyP(params, context)) yield result
 
   override def constant[T](value:T):Some[T] = Some(value)
 

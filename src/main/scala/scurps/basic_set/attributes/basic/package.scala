@@ -24,8 +24,7 @@ package object basic {
         context.get(Subject).ifDefined(_ => Score(10).constant) // TODO accordingTo
     },
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
-      override def apply[A[+_]](params:(A[BasicAttribute],A[IntScore]), context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
-        val (attribute, newScore) = params
+      override def apply[A[+_]](attribute:A[BasicAttribute], newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
         val newBoughtPoints = newScore :- FreeAttributeScore(attribute, context)
         val boughtPointsKey = BoughtBasicAttributePoints.of(attribute)
         newBoughtPoints.ifZero(
