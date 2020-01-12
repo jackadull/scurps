@@ -5,6 +5,9 @@ import scurps.meta.data.PMap
 import scurps.meta.math.{Add, IsZero, Subtract}
 
 trait ScurpsOpsImplicits {
+  // TODO rename to pure?
+  @inline final implicit def constant[T,A[+_]](v:T)(implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
+
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def :+(rhs:A[T])(implicit add:Add[T], ops:ScurpsOps[A]):A[T] = ops.added(v, rhs)
     @inline def :-(rhs:A[T])(implicit subtract:Subtract[T], ops:ScurpsOps[A]):A[T] = ops.subtracted(v, rhs)
@@ -25,10 +28,5 @@ trait ScurpsOpsImplicits {
     @inline def removed(key:A[K[_]])(implicit ops:ScurpsOps[A]):A[PMap[K]] = ops.removedFromPMap(v, key)
     @inline def updated[T](key:A[K[T]], value:A[T])(implicit ops:ScurpsOps[A]):A[PMap[K]] =
       ops.updatedInPMap(v, key, value)
-  }
-
-  final implicit class RichAny[+T](v:T) {
-    // TODO maybe replace with implicit conversion, or rename to `pure`
-    @inline def constant[A[+_]](implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
   }
 }

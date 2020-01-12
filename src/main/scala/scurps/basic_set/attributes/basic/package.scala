@@ -17,11 +17,11 @@ package object basic {
     },
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        context.get(Subject).ifDefined(_.get(BoughtBasicAttributePoints.of(attribute)).orElse(Score(0).constant)) // TODO accordingTo
+        context.get(Subject).ifDefined(_.get(BoughtBasicAttributePoints.of(attribute)).orElse(Score(0))) // TODO accordingTo
     },
     FreeAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        context.get(Subject).ifDefined(_ => Score(10).constant) // TODO accordingTo
+        context.get(Subject).ifDefined(_ => Score(10)) // TODO accordingTo
     },
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](attribute:A[BasicAttribute], newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
