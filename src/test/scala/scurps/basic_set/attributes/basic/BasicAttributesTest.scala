@@ -13,24 +13,24 @@ class BasicAttributesTest extends FreeSpec with Matchers {
 
   "When there is no subject:" - {
     "Strength is undefined." in
-      {Strength(GameContext.basicSet.constant) should be (None)}
+      {Strength[Option](GameContext.basicSet) should be (None)} // TODO looks ugly to supply A
     "Bought strength points is undefined." in
-      {BoughtBasicAttributePoints(Strength.constant, GameContext.basicSet.constant) should be (None)}
+      {BoughtBasicAttributePoints[Option](Strength, GameContext.basicSet) should be (None)}
     "Free strength points is undefined." in
-      {FreeAttributeScore(Strength.constant, GameContext.basicSet.constant) should be (None)}
+      {FreeAttributeScore[Option](Strength, GameContext.basicSet) should be (None)}
     "Setting strength returns undefined." in
-      {Strength.set(Score(12).constant, GameContext.basicSet.constant) should be (None)}
+      {Strength.set[Option](Score(12), GameContext.basicSet) should be (None)}
   }
   "For an empty subject" - {
-    val context = GameContext.basicSet.updated(Subject, PMap.empty).constant
+    val context = GameContext.basicSet.updated(Subject, PMap.empty)
     "Strength is 10." in
-      {Strength(context) should be (Some(Score(10)))}
+      {Strength[Option](context) should be (Some(Score(10)))}
     "Bought strenght points is 0." in
-      {BoughtBasicAttributePoints(Strength.constant, context) should be (Some(Score(0)))}
+      {BoughtBasicAttributePoints[Option](Strength, context) should be (Some(Score(0)))}
     "Free strength points is 10." in
-      {FreeAttributeScore(Strength.constant, context) should be (Some(Score(10)))}
+      {FreeAttributeScore[Option](Strength, context) should be (Some(Score(10)))}
     "After setting strength to 8, it remains 8." in {
-      val str8 = Strength.set(Score(8).constant, context)
+      val str8 = Strength.set[Option](Score(8), context)
       Strength(str8) should be (Some(Score(8)))
     }
   }
