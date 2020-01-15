@@ -4,6 +4,8 @@ import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.PMap
 import scurps.meta.math.{Add, IsZero, Subtract}
 
+import scala.language.implicitConversions
+
 trait ScurpsOpsImplicits {
   // TODO rename to pure?
   @inline final implicit def constant[T,A[+_]](v:T)(implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
