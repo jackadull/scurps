@@ -1,3 +1,5 @@
 package scurps.meta.context
 
-trait ValueKey[T]
+import scurps.meta.data.ShowKey.ShowKey
+
+trait ValueKey[T] extends ShowKey

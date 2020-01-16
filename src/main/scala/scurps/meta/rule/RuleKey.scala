@@ -2,8 +2,9 @@ package scurps.meta.rule
 
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.context.GameContext
+import scurps.meta.data.ShowKey.ShowKey
 
-trait RuleKey[-P[_[_]],+R] extends Rule[P,R] {
+trait RuleKey[-P[_[_]],+R] extends Rule[P,R] with ShowKey {
   override def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
     ops.applyRuleByKey(this, params, context)
 }

@@ -2,13 +2,18 @@ package scurps.meta.data
 
 /** `toString` implementations for key types. */
 object ShowKey {
-  trait ShowParameterizedKey {
-    def showParameterLists:Seq[String] // TODO try using Shapeless for this
-    override def toString:String = ofParameterizedKey(this, showParameterLists)
+  trait ShowKey {
+    def showKey:String
+    override def toString:String = showKey
   }
 
-  trait ShowSingletonKey {
-    override def toString:String = ofSingletonKey(this)
+  trait ShowParameterizedKey extends ShowKey {
+    def showParameterLists:Seq[String] // TODO try using Shapeless for this
+    override def showKey:String = ofParameterizedKey(this, showParameterLists)
+  }
+
+  trait ShowSingletonKey extends ShowKey {
+    override def showKey:String = ofSingletonKey(this)
   }
 
   def ofSingletonKey(key:AnyRef):String = {
@@ -22,5 +27,5 @@ object ShowKey {
   }
 
   private def showString(packageName:String, keyName:String, paramLists:Seq[String]):String =
-    s"$keyName${paramLists.map(pl => s"($pl)").mkString}--$packageName"
+    s"$keyName--$packageName${paramLists.map(pl => s"($pl)").mkString}"
 }
