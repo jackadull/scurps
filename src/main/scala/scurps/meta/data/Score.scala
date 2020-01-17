@@ -8,11 +8,8 @@ object Score {
 
   final case class IntScore private(intValue:Int) extends AnyVal with Score[Int]
   object IntScore {
-    // TODO find a good super trait that combines those arithmetic operations, also for CP
-    implicit object IntScoreArithmetic extends Add[IntScore] with IsZero[IntScore] with Subtract[IntScore] {
-      @inline override def add(lhs:IntScore, rhs:IntScore):IntScore = Score(lhs.intValue + rhs.intValue)
-      @inline override def isZero(v:IntScore):Boolean = v.intValue==0
-      @inline override def subtract(lhs:IntScore, rhs:IntScore):IntScore = Score(lhs.intValue - rhs.intValue)
-    }
+    implicit val addIntScore:Add[IntScore] = {(lhs,rhs) => IntScore(lhs.intValue + rhs.intValue)}
+    implicit val isZeroIntScore:IsZero[IntScore] = _.intValue==0
+    implicit val subtactIntScore:Subtract[IntScore] = {(lhs,rhs) => IntScore(lhs.intValue - rhs.intValue)}
   }
 }
