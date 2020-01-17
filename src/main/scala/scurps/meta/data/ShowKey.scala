@@ -8,8 +8,12 @@ object ShowKey {
   }
 
   trait ShowParameterizedKey extends ShowKey {
-    def showParameterLists:Seq[String] // TODO try using Shapeless for this
+    def showParameterLists:Seq[String]
     override def showKey:String = ofParameterizedKey(this, showParameterLists)
+  }
+
+  trait ShowProductKey extends ShowParameterizedKey with Product {
+    override def showParameterLists:Seq[String] = productIterator.map(_.toString).toSeq
   }
 
   trait ShowSingletonKey extends ShowKey {
@@ -18,12 +22,19 @@ object ShowKey {
 
   def ofSingletonKey(key:AnyRef):String = {
     val cls = key.getClass
-    showString(cls.getPackageName, cls.getSimpleName.replaceAll("\\$$", ""), Seq.empty) // TODO what about inner classes?
+    showString(showPackageAndEnclosing(cls), showName(cls), Seq.empty)
   }
 
   def ofParameterizedKey(key:AnyRef, parameterLists:Seq[String]):String = {
     val cls = key.getClass
-    showString(cls.getPackageName, cls.getSimpleName, parameterLists) // TODO what about inner classes?
+    showString(showPackageAndEnclosing(cls), cls.getSimpleName, parameterLists)
+  }
+
+  private def showName(cls:Class[_]):String = cls.getSimpleName.replaceAll("\\$$", "")
+
+  private def showPackageAndEnclosing(cls:Class[_]):String = Option(cls.getEnclosingClass) match {
+    case None => cls.getPackageName
+    case Some(enclosing) => s"${showPackageAndEnclosing(enclosing)}.${showName(enclosing)}"
   }
 
   private def showString(packageName:String, keyName:String, paramLists:Seq[String]):String =

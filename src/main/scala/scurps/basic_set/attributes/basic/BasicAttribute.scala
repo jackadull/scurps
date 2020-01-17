@@ -18,5 +18,5 @@ trait BasicAttribute extends Rule0[IntScore] {
   private[basic] val boughtPointsKey:BoughtBasicAttributePoints = new BoughtBasicAttributePoints(this)
 }
 object BasicAttribute {
-  case object Strength extends BasicAttribute
+  case object Strength extends BasicAttribute {override def toString:String = "Strength"}
 }

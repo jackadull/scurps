@@ -1,6 +1,7 @@
 package scurps.basic_set.attributes
 
 import scurps._
+import scurps.basic_set.bib.G4e_Characters.Ch01_Creating_A_Character.Basic_Attributes
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.context.ContextKey.Subject
 import scurps.meta.context.GameContext
@@ -13,15 +14,16 @@ package object basic {
   val basicSetRules:RuleCatalog = RuleCatalog(
     BasicAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        FreeAttributeScore(attribute, context) :+ BoughtBasicAttributePoints(attribute, context) // TODO accordingTo
+        (FreeAttributeScore(attribute, context) :+ BoughtBasicAttributePoints(attribute, context))
+          .accordingTo(basicAttributesIntro)
     },
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        context.get(Subject).ifDefined(_.get(BoughtBasicAttributePoints.of(attribute)).orElse(Score(0))) // TODO accordingTo
+        context.get(Subject).ifDefined(_.get(BoughtBasicAttributePoints.of(attribute)).orElse(Score(0)))
     },
     FreeAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        context.get(Subject).ifDefined(_ => Score(10)) // TODO accordingTo
+        context.get(Subject).ifDefined(_ => Score(10)).accordingTo(basicAttributesIntro)
     },
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](attribute:A[BasicAttribute], newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
@@ -30,8 +32,10 @@ package object basic {
         newBoughtPoints.ifZero(
           _then = context.mod(Subject) {_.removed(boughtPointsKey)},
           _else = context.mod(Subject) {_.updated(boughtPointsKey, newBoughtPoints)}
-        ) // TODO accordingTo; the ifZero construct might become a useful implicit
+        ) // TODO the ifZero construct might become a useful implicit
       }
     }
   )
+
+  private val basicAttributesIntro = Basic_Attributes.chapter.page(14)
 }

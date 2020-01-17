@@ -13,7 +13,7 @@ class BasicAttributesTest extends FreeSpec with Matchers {
 
   "When there is no subject:" - {
     "Strength is undefined." in
-      {Strength[Option](GameContext.basicSet) should be (None)} // TODO looks ugly to supply A
+      {Strength[Option](GameContext.basicSet) should be (None)}
     "Bought strength points is undefined." in
       {BoughtBasicAttributePoints[Option](Strength, GameContext.basicSet) should be (None)}
     "Free strength points is undefined." in
