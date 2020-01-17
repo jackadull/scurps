@@ -1,7 +1,7 @@
 package scurps.basic_set.attributes.basic
 
-import scurps.meta.data.Score.IntScore
+import scurps.meta.data.CP
 import scurps.meta.data.ShowKey.ShowSingletonKey
 import scurps.meta.rule.RuleKey.RuleKey1
 
-object FreeAttributeScore extends RuleKey1[BasicAttribute,IntScore] with ShowSingletonKey
+object CPCostPerBasicAttributePoint extends RuleKey1[BasicAttribute,CP] with ShowSingletonKey

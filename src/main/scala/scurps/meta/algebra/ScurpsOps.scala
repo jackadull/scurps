@@ -3,7 +3,7 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.math.{Add, IsZero, Subtract}
+import scurps.meta.math.{Add, IsZero, Multiply, Subtract}
 import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -39,6 +39,10 @@ trait ScurpsOps[A[_]] {
    * undefined. */
   def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2]
 
+  /** If the given value is contained in the given set, the given `_then` gets applied to it, otherwise the given
+   * `_else`. */
+  def ifIsOneOf[T,T2](value:A[T], set:A[Set[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2]):A[T2]
+
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
@@ -53,12 +57,15 @@ trait ScurpsOps[A[_]] {
    * undefined. */
   def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
 
+  /** Mathematical multiplication of the given values. */
+  def multiplied[T1,T2,R](lhs:A[T1], rhs:A[T2])(implicit multiply:Multiply[T1,T2,R]):A[R]
+
   /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no
    * entry for the key, return the map unchanged. */
   def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]]
 
   /** Mathematical subtraction of the two given values. */
-  def subtracted[T](value1:A[T], value2:A[T])(implicit subtract:Subtract[T]):A[T]
+  def subtracted[T](lhs:A[T], rhs:A[T])(implicit subtract:Subtract[T]):A[T]
 
   /** Update the entry for the given key in the [[PMap]], returning the modified map. If there already is a value
    * stored for the key, it gets overwritten. Otherwise, a new entry is added. */

@@ -4,4 +4,4 @@ import scurps.meta.data.Score.IntScore
 import scurps.meta.data.ShowKey.ShowSingletonKey
 import scurps.meta.rule.RuleKey.RuleKey1
 
-case object BasicAttributeScore extends RuleKey1[BasicAttribute,IntScore] with ShowSingletonKey
+object BasicAttributeScore extends RuleKey1[BasicAttribute,IntScore] with ShowSingletonKey

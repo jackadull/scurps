@@ -19,4 +19,7 @@ trait BasicAttribute extends Rule0[IntScore] {
 }
 object BasicAttribute {
   case object Strength extends BasicAttribute {override def toString:String = "Strength"}
+  case object Dexterity extends BasicAttribute {override def toString:String = "Dexterity"}
+  case object Health extends BasicAttribute {override def toString:String = "Health"}
+  case object Intelligence extends BasicAttribute {override def toString:String = "Intelligence"}
 }

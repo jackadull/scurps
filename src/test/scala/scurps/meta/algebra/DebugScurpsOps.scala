@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.math.{Add, IsZero, Subtract}
+import scurps.meta.math.{Add, IsZero, Multiply, Subtract}
 import scurps.meta.rule.RuleKey
 
 class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
@@ -27,8 +27,8 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def accordingTo[T](value:A[T], ref:BibRef):A[T] =
     debug("accordingTo", s"value=$value, ref=$ref", base.accordingTo(value, ref))
 
-  override def added[T](value1:A[T], value2:A[T])(implicit add:Add[T]):A[T] =
-    debug("added", s"value1=$value1, value2=$value2", base.added(value1, value2))
+  override def added[T](lhs:A[T], rhs:A[T])(implicit add:Add[T]):A[T] =
+    debug("added", s"lhs=$lhs, rhs=$rhs", base.added(lhs, rhs))
 
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
     debug("applyRuleByKey", s"key=$key, params=${debugFmtParams(params)}, context=$context", base.applyRuleByKey(key, params, context))
@@ -42,6 +42,9 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2] =
     debug("ifDefined", s"value=$value, _then=???", base.ifDefined(value, _then))
 
+  override def ifIsOneOf[T,T2](value:A[T], set:A[Set[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2]):A[T2] =
+    debug("ifIsOneOf", s"value=$value, set=$set, _then=???, _else=???", base.ifIsOneOf(value, set, _then, _else))
+
   override def ifZero[T, T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2] =
     debug("ifZero", s"value=$value, _then=???, _else=???", base.ifZero(value, _then, _else))
 
@@ -51,14 +54,17 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext] =
     debug("modInContext", s"context=$context, key=$key, f=???", base.modInContext(context, key, f))
 
+  override def multiplied[T1,T2,R](lhs:A[T1], rhs:A[T2])(implicit multiply:Multiply[T1,T2,R]):A[R] =
+    debug("multiplied", s"lhs=$lhs, rhs=$rhs", base.multiplied(lhs, rhs))
+
   override def pure[T](value:T):A[T] =
     debug("pure", s"value=$value", base.pure(value))
 
   override def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]] =
     debug("removedFromPMap", s"pMap=$pMap, key=$key", base.removedFromPMap[K](pMap, key))
 
-  override def subtracted[T](value1:A[T], value2:A[T])(implicit subtract:Subtract[T]):A[T] =
-    debug("subracted", s"value1=$value1, value2=$value2", base.subtracted(value1, value2))
+  override def subtracted[T](lhs:A[T], rhs:A[T])(implicit subtract:Subtract[T]):A[T] =
+    debug("subracted", s"lhs=$lhs, rhs=$rhs", base.subtracted(lhs, rhs))
 
   override def updatedInPMap[T,K[_]](pMap:A[PMap[K]], key:A[K[T]], value:A[T]):A[PMap[K]] =
     debug("updatedInPMap", s"pMap=$pMap, key=$key, value=$value", base.updatedInPMap(pMap, key, value))
