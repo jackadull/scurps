@@ -1,7 +1,6 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.context.ContextKey.Subject
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.PMap
 import scurps.meta.math.{Add, IsZero, Subtract}
