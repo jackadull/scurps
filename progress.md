@@ -32,4 +32,5 @@ Passages not mentioned are fully covered.
       * _Special Limitations_ (p. 15): not covered.
     * _Dexterity_
       * _Special Limitations_ (p. 15): not covered.
+    * _IQ, Sentience, and Sapience_ (p. 15): not covered.
 * Everything from _Secondary Characteristics_ (pp. 15-569): not covered.
