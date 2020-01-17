@@ -9,7 +9,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
 
   override def added[T](value1:Option[T], value2:Option[T])(implicit add:Add[T]):Option[T] =
-    for(v1<-value1; v2<-value2) yield add(v1, v2)
+    for(v1<-value1; v2<-value2) yield add.add(v1, v2)
 
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule.applyP(params, context)) yield result
@@ -27,7 +27,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def ifZero[T,T2](value:Option[T], _then: =>Option[T2], _else: =>Option[T2])(implicit isZero:IsZero[T]):Option[T2] =
     value match {
-      case Some(v) if isZero(v) => _then
+      case Some(v) if isZero.isZero(v) => _then
       case Some(_) => _else
       case None => None
     }
@@ -43,7 +43,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     for(m<-pMap; k<-key) yield m.removed(k)
 
   override def subtracted[T](value1:Option[T], value2:Option[T])(implicit subtract:Subtract[T]):Option[T] =
-    for(v1<-value1; v2<-value2) yield subtract(v1, v2)
+    for(v1<-value1; v2<-value2) yield subtract.subtract(v1, v2)
 
   override def updatedInPMap[T,K[_]](pMap:Option[PMap[K]], key:Option[K[T]], value:Option[T]):Option[PMap[K]] =
     for(m<-pMap; k<-key; v<-value) yield m.updated(k, v)

@@ -1,3 +1,5 @@
 package scurps.meta.math
 
-trait IsZero[A] extends (A=>Boolean)
+trait IsZero[A] {
+  def isZero(v:A):Boolean
+}

@@ -1,3 +1,5 @@
 package scurps.meta.math
 
-trait Subtract[A] extends ((A,A)=>A)
+trait Subtract[A] {
+  def subtract(lhs:A, rhs:A):A
+}
