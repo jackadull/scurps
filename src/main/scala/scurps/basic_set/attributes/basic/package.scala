@@ -27,12 +27,8 @@ package object basic {
     },
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](attribute:A[BasicAttribute], newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
-        val newBoughtPoints = newScore :- FreeAttributeScore(attribute, context)
         val boughtPointsKey = BoughtBasicAttributePoints.of(attribute)
-        newBoughtPoints.ifZero(
-          _then = context.mod(Subject) {_.removed(boughtPointsKey)},
-          _else = context.mod(Subject) {_.updated(boughtPointsKey, newBoughtPoints)}
-        ) // TODO the ifZero construct might become a useful implicit
+        context.mod(Subject) {_.updatedNonZero(boughtPointsKey, newScore :- FreeAttributeScore(attribute, context))}
       }
     }
   )

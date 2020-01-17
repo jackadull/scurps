@@ -22,5 +22,6 @@ object RuleCatalog {
     override def get[P[_[_]],R](key:RuleKey[P,R]):Option[Rule[P,R]] =
       map.get(key).asInstanceOf[Option[Rule[P,R]]]
     override def isEmpty:Boolean = map.isEmpty
+    override def toString:String = super.toString
   }
 }

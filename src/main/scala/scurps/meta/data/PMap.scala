@@ -21,15 +21,15 @@ object PMap {
     override def get[V](key:K[V]):Option[V] = baseMap.get(key).asInstanceOf[Option[V]]
     override def isEmpty:Boolean = baseMap.isEmpty
     override def removed(key:K[_]):Repr = if(contains(key)) withBaseMap(baseMap - key) else this
+    override def toString:String = s"PMap$baseMap"
     override def updated[V](key:K[V], value:V):Repr = baseMap.get(key) match {
       case Some(`value`) => this
       case _ => withBaseMap(baseMap.updated(key, value))
     }
-    // TODO toString
   }
 
   private final case class Impl[K[_]](baseMap:Map[K[_],Any]) extends MapBasedPMap[K,Impl[K]] {
     override protected def withBaseMap(newBaseMap:Map[K[_],Any]):Impl[K] = Impl[K](newBaseMap)
-    // TODO toString
+    baseMap.toString
   }
 }

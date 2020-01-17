@@ -1,6 +1,7 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
+import scurps.meta.context.ContextKey.Subject
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.PMap
 import scurps.meta.math.{Add, IsZero, Subtract}
@@ -8,8 +9,7 @@ import scurps.meta.math.{Add, IsZero, Subtract}
 import scala.language.implicitConversions
 
 trait ScurpsOpsImplicits {
-  // TODO rename to pure?
-  @inline final implicit def constant[T,A[+_]](v:T)(implicit ops:ScurpsOps[A]):A[T] = ops.constant(v)
+  @inline final implicit def pure[T,A[+_]](v:T)(implicit ops:ScurpsOps[A]):A[T] = ops.pure(v)
 
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def :+(rhs:A[T])(implicit add:Add[T], ops:ScurpsOps[A]):A[T] = ops.added(v, rhs)
@@ -32,5 +32,7 @@ trait ScurpsOpsImplicits {
     @inline def removed(key:A[K[_]])(implicit ops:ScurpsOps[A]):A[PMap[K]] = ops.removedFromPMap(v, key)
     @inline def updated[T](key:A[K[T]], value:A[T])(implicit ops:ScurpsOps[A]):A[PMap[K]] =
       ops.updatedInPMap(v, key, value)
+    @inline def updatedNonZero[T](key:A[K[T]], value:A[T])(implicit isZero:IsZero[T], ops:ScurpsOps[A]):A[PMap[K]] =
+      ops.ifZero(value, _then = ops.removedFromPMap(v, key), _else = ops.updatedInPMap(v, key, value))
   }
 }

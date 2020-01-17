@@ -14,8 +14,6 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule.applyP(params, context)) yield result
 
-  override def constant[T](value:T):Some[T] = Some(value)
-
   override def getFromContext[T](context:Option[GameContext], key:ContextKey[T]):Option[T] =
     for(ctx<-context; result<-ctx.get(key)) yield result
 
@@ -35,6 +33,8 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     }
 
   override def orElse[T](value:Option[T], defaultValue: =>Option[T]):Option[T] = value.orElse(defaultValue)
+
+  override def pure[T](value:T):Some[T] = Some(value)
 
   override def modInContext[T](context:Option[GameContext], key:ContextKey[T], f:Option[T]=>Option[T]):Option[GameContext] =
     for(ctx<-context; current<-ctx.get(key); newValue<-f(Some(current))) yield ctx.updated(key, newValue)

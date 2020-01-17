@@ -33,9 +33,6 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
     debug("applyRuleByKey", s"key=$key, params=${debugFmtParams(params)}, context=$context", base.applyRuleByKey(key, params, context))
 
-  override def constant[T](value:T):A[T] =
-    debug("constant", s"value=$value", base.constant(value))
-
   override def getFromContext[T](context:A[GameContext], key:ContextKey[T]):A[T] =
     debug("getFromContext", s"context=$context, key=$key", base.getFromContext(context, key))
 
@@ -53,6 +50,9 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
 
   override def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext] =
     debug("modInContext", s"context=$context, key=$key, f=???", base.modInContext(context, key, f))
+
+  override def pure[T](value:T):A[T] =
+    debug("pure", s"value=$value", base.pure(value))
 
   override def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]] =
     debug("removedFromPMap", s"pMap=$pMap, key=$key", base.removedFromPMap[K](pMap, key))

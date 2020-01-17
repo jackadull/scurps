@@ -28,9 +28,6 @@ trait ScurpsOps[A[_]] {
    * invoked rule. */
   def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 
-  /** Wrap the given value in [[A]]. */
-  def constant[T](value:T):A[T]
-
   /** Get a context value denoted by key. Is undefined if no value is defined for the key in the context. */
   def getFromContext[T](context:A[GameContext], key:ContextKey[T]):A[T]
 
@@ -44,6 +41,9 @@ trait ScurpsOps[A[_]] {
 
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
+
+  /** Wrap the given value in [[A]]. */
+  def pure[T](value:T):A[T]
 
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue: =>A[T]):A[T]
