@@ -1,4 +1,17 @@
-# Basic set progress
+# Rule modelling progress
+
+## Meta
+
+Only major features.
+
+* Explaination algebra, maybe with GraphViz output.
+* Probabilistic algebra.
+* Serialization.
+* Spec-Driven specification.
+* Translation.
+* Validations.
+
+## Basic Set
 
 Passages not mentioned are fully covered.
 
