@@ -3,7 +3,7 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.PMap
-import scurps.meta.math.ArithmeticOp.{Addition, IsZero, Multiplication, Subtraction}
+import scurps.meta.algebra.ArithmeticOp.{Addition, IsZero, Multiplication, Subtraction}
 
 import scala.language.implicitConversions
 

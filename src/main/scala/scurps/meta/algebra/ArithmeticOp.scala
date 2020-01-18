@@ -1,4 +1,4 @@
-package scurps.meta.math
+package scurps.meta.algebra
 
 /** An arithmetic operation yielding a certain result. Sub-traits define the arity and parameter types of specific
  * arithmetic operations. Instances of this type are supposed to be passed implicitly, to support abstracing over
