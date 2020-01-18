@@ -45,6 +45,86 @@ This is why a closer look at a comprehensive FP library is noteworthy, seeing ho
 * Simple addition and subtraction is a semigroup, or a monoid.
 * Applying a rule is a bit like passing the rule and its parameters to an Applicative or Functor.
 
+# Conclusion
+
+Traditional FP abstractions abstract over the wrong things for this case.
+FP abstractions are _operations_, but here we want to abstract over the parameters and results of those operations.
+The operations themselves are already modelled by the algebra.
+
+## Folding
+
+For creating a CP balance, the proper operation would be `fold`.
+So the FP abstraction to use would be a `Fold` type.
+However, in this case, the fold operation itself is not a problem, in that it can be just another method of `ScurpsOps`.
+Rather, we would like to abstract over its parameters and result type.
+
+Looking at those, we get something like: `[A,B](A)((A,B)=>A):A`
+This might be called a "foldee", or "accumulation", like this:
+
+```scala
+trait Accumulation[T,+Repr<:Accumulation[T,Repr]] {
+  def accumulate(v:T):Repr
+}
+```
+
+The corresponding method in `ScurpsOps` might look like this:
+
+```scala
+def fold[T,R<:Accumulation[T,R]](seq:A[Iterable[T]], acc:A[R]):A[R]
+```
+
+## Optics
+
+For accessing certain members of an algebraic values in a semantically transparent way, it seems that optics are a good
+ way of doing it.
+For example, if an advantage instance has a member giving the rule for calculating its CP cost, then accessing that
+ member inside an `A[Advantage]` would mean applying a `Lens[Advantage,Rule1[Advantage,CP]]` to it via the algebra.
+
+The same goes for changing properties of algebraic values.
+
+Seen this way, consequently using optics for such cases might render types like `ContextKey` or `ValueKey` entirely
+ redundant, by replacing them with proper lenses.
+
+However, a standard lens library might not be sufficient for this.
+The individual lenses used in conjunction with `ScurpsOps` should be describable and usable in explanations.
+While this concept is not at all explored at this stage, it likely will require attaching conceptual representation
+ values to the lens types, which can then be used to explain those operations and translate them to natural language.
+
+Therefore, it makes sense to introduce a minimum of optics to Scurps Meta, and consequently replace the current
+ key-based lookup and set methods in `ScurpsOps` with them.
+
+This should also solve the likely upcoming problem of the current `PMap` modification methods not returning the proper
+ result subtype.
+
+## Reconsider arithmetics
+
+Let's also reconsider arithmetic operations.
+Currently, `ScurpsOps` has different methods for addition, subtraction and multiplication, even though their type
+ signatures are similar.
+(The exception is multiplication, because all three involved types may be different.)
+
+Maybe it would be more convenient to model arithmetic operations as a sealed trait, so the algebra implementation can
+ decide on itself wether to look into the specific subtype, or just blindly applying the operation.
+
+The common type for most arithmetic operations would be `[A,B,C](A,B)=>C`.
+But it would be better to restrict the type to a specific sealed trait, so as not to allow any arbitrary `Function2` to
+ creep in.
+
+## Remaining operations
+
+With all the changes above considered, this would be the methods of `ScurpsOps` left unchanged:
+* `accordingTo[T](A[T], BibRef):A[T]`
+* `applyRuleByKey[P[_[_]],R](RuleKey[P,R], P[A], A[GameContext])(implicit ScurpsOps[A]):A[R]`
+* `ifDefined[T,T2](A[T], A[T]=>A[T2]):A[T2]`
+* `pure[T](T):A[T]`
+* `orElse[T](A[T], =>A[T]):A[T]`
+
+All of these methods deal with the immediate semantics of the algebraic datatype.
+Arithmetic or optical methods simply lift their respective non-algebraic counterparts into the algebraic context.
+
+For the methods above though, there would be no way to "unlift" them.
+Therefore, it makes sense to keep them as fundamental algebraic operations.
+
 [APair]: https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/APair.scala
 [Apply]: https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Apply.scala
 [Cats typeclasses]: https://typelevel.org/cats/typeclasses

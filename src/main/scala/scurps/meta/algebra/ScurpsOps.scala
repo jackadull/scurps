@@ -18,6 +18,7 @@ trait ScurpsOps[A[_]] {
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
 
+  // TODO reconsider arithmetics, see `fp_notes.md`
   /** Mathematical addition of the two given values. */
   def added[T](value1:A[T], value2:A[T])(implicit add:Add[T]):A[T]
 
@@ -28,9 +29,11 @@ trait ScurpsOps[A[_]] {
    * invoked rule. */
   def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 
+  // TODO optics, see `fp_notes.md`
   /** Get a context value denoted by key. Is undefined if no value is defined for the key in the context. */
   def getFromContext[T](context:A[GameContext], key:ContextKey[T]):A[T]
 
+  // TODO optics, see `fp_notes.md`
   /** Get a value from a given [[PMap]], denoted by the value key. If the map does not contain a value for the key, the
    * result is undefined. */
   def getFromPMap[K[_],T](pMap:A[PMap[K]], key:A[K[T]]):A[T]
@@ -39,10 +42,12 @@ trait ScurpsOps[A[_]] {
    * undefined. */
   def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2]
 
+  // TODO optics, see `fp_notes.md`
   /** If the given value is contained in the given set, the given `_then` gets applied to it, otherwise the given
    * `_else`. */
   def ifIsOneOf[T,T2](value:A[T], set:A[Set[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2]):A[T2]
 
+  // TODO reconsider arithmetics, see `fp_notes.md`
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
@@ -52,25 +57,31 @@ trait ScurpsOps[A[_]] {
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue: =>A[T]):A[T]
 
+  // TODO optics, see `fp_notes.md`
   /** Modify the given context, by applying the given function to the value stored for the given context key, returning
    * a new context in which the new value is stored. If the value is not defined in the context, the result is
    * undefined. */
   def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
 
+  // TODO reconsider arithmetics, see `fp_notes.md`
   /** Mathematical multiplication of the given values. */
   def multiplied[T1,T2,R](lhs:A[T1], rhs:A[T2])(implicit multiply:Multiply[T1,T2,R]):A[R]
 
+  // TODO optics, see `fp_notes.md`
   /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no
    * entry for the key, return the map unchanged. */
   def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]]
 
+  // TODO reconsider arithmetics, see `fp_notes.md`
   /** Mathematical subtraction of the two given values. */
   def subtracted[T](lhs:A[T], rhs:A[T])(implicit subtract:Subtract[T]):A[T]
 
+  // TODO optics, see `fp_notes.md`
   /** Update the entry for the given key in the [[PMap]], returning the modified map. If there already is a value
    * stored for the key, it gets overwritten. Otherwise, a new entry is added. */
   def updatedInPMap[T,K[_]](pMap:A[PMap[K]], key:A[K[T]], value:A[T]):A[PMap[K]]
 
+  // TODO optics, see `fp_notes.md` (might be a prism?)
   /** Wrap the given value in a key that can be looked up in a [[PMap]]. */
   def wrapKey[T,K](value:A[T], wrap:WrapKey[T,K]):A[K]
 }
