@@ -1,7 +1,6 @@
 package scurps.meta.data
 
-import scurps.meta.math.ArithmeticOp.Addition
-import scurps.meta.math.{Add, IsZero, Subtract}
+import scurps.meta.math.ArithmeticOp.{Addition, IsZero, Multiplication, Subtraction}
 
 sealed trait Score[+A] extends Any
 object Score {
@@ -9,10 +8,10 @@ object Score {
 
   final case class IntScore private(intValue:Int) extends AnyVal with Score[Int]
   object IntScore {
-    implicit val addIntScore:Add[IntScore] = {(lhs,rhs) => IntScore(lhs.intValue + rhs.intValue)}
-    implicit val isZeroIntScore:IsZero[IntScore] = _.intValue==0
-    implicit val subtactIntScore:Subtract[IntScore] = {(lhs,rhs) => IntScore(lhs.intValue - rhs.intValue)}
+    implicit val intScoreAddition:Addition[IntScore] = {(lhs,rhs) => IntScore(lhs.intValue + rhs.intValue)}
+    implicit val intScoreIsZero:IsZero[IntScore] = _.intValue==0
+    implicit val intScoreSubtraction:Subtraction[IntScore] = {(lhs,rhs) => IntScore(lhs.intValue - rhs.intValue)}
 
-    implicit val intScoreAddition:Addition[]
+    implicit val intScoreWithCPMultiplication:Multiplication[IntScore,CP,CP] = {(lhs,rhs) => CP(lhs.intValue * rhs.intValue)}
   }
 }

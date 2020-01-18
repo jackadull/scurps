@@ -3,7 +3,7 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.math.{Add, IsZero, Multiply, Subtract}
+import scurps.meta.math.ArithmeticOp.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -18,16 +18,18 @@ trait ScurpsOps[A[_]] {
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
 
-  // TODO reconsider arithmetics, see `fp_notes.md`
-  /** Mathematical addition of the two given values. */
-  def added[T](value1:A[T], value2:A[T])(implicit add:Add[T]):A[T]
-
   /** Calculate the result of the rule denoted by the given key, with the given parameters. If no rule is found in the
    * context's catalog for that key, or if the context is undefined, the result is undefined.
    *
    * The implicit [[ScurpsOps]] is passed so that the implementation can pass on the top-level ops instance to the
    * invoked rule. */
   def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
+
+  /** Result of applying the given single-parameter arithmetic operation. */
+  def arithmetic[T1,R](v:A[T1], aop:ArithmeticOp1[T1,R]):A[R]
+
+  /** Result of applying the given two-parameter arithmetic operation. */
+  def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOp2[T1,T2,R]):A[R]
 
   // TODO optics, see `fp_notes.md`
   /** Get a context value denoted by key. Is undefined if no value is defined for the key in the context. */
@@ -47,7 +49,6 @@ trait ScurpsOps[A[_]] {
    * `_else`. */
   def ifIsOneOf[T,T2](value:A[T], set:A[Set[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2]):A[T2]
 
-  // TODO reconsider arithmetics, see `fp_notes.md`
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
@@ -63,18 +64,10 @@ trait ScurpsOps[A[_]] {
    * undefined. */
   def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
 
-  // TODO reconsider arithmetics, see `fp_notes.md`
-  /** Mathematical multiplication of the given values. */
-  def multiplied[T1,T2,R](lhs:A[T1], rhs:A[T2])(implicit multiply:Multiply[T1,T2,R]):A[R]
-
   // TODO optics, see `fp_notes.md`
   /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no
    * entry for the key, return the map unchanged. */
   def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]]
-
-  // TODO reconsider arithmetics, see `fp_notes.md`
-  /** Mathematical subtraction of the two given values. */
-  def subtracted[T](lhs:A[T], rhs:A[T])(implicit subtract:Subtract[T]):A[T]
 
   // TODO optics, see `fp_notes.md`
   /** Update the entry for the given key in the [[PMap]], returning the modified map. If there already is a value

@@ -1,18 +1,22 @@
 package scurps.meta.algebra
+
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.math.{Add, IsZero, Multiply, Subtract}
+import scurps.meta.math.ArithmeticOp
+import scurps.meta.math.ArithmeticOp.IsZero
 import scurps.meta.rule.RuleKey
 
 object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
 
-  override def added[T](lhs:Option[T], rhs:Option[T])(implicit add:Add[T]):Option[T] =
-    for(l<-lhs; r<-rhs) yield add.add(l, r)
-
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule.applyP(params, context)) yield result
+
+  override def arithmetic[T1,R](v:Option[T1], aop:ArithmeticOp.ArithmeticOp1[T1,R]):Option[R] = v.map(aop)
+
+  override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:ArithmeticOp.ArithmeticOp2[T1, T2, R]):Option[R] =
+    for(l<-lhs; r<-rhs) yield aop(l, r)
 
   override def getFromContext[T](context:Option[GameContext], key:ContextKey[T]):Option[T] =
     for(ctx<-context; result<-ctx.get(key)) yield result
@@ -30,7 +34,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def ifZero[T,T2](value:Option[T], _then: =>Option[T2], _else: =>Option[T2])(implicit isZero:IsZero[T]):Option[T2] =
     value match {
-      case Some(v) if isZero.isZero(v) => _then
+      case Some(v) if isZero(v) => _then
       case Some(_) => _else
       case None => None
     }
@@ -42,14 +46,8 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def modInContext[T](context:Option[GameContext], key:ContextKey[T], f:Option[T]=>Option[T]):Option[GameContext] =
     for(ctx<-context; current<-ctx.get(key); newValue<-f(Some(current))) yield ctx.updated(key, newValue)
 
-  override def multiplied[T1,T2,R](lhs:Option[T1], rhs:Option[T2])(implicit multiply:Multiply[T1,T2,R]):Option[R] =
-    for(l<-lhs; r<-rhs) yield multiply.multiply(l, r)
-
   override def removedFromPMap[K[_]](pMap:Option[PMap[K]], key:Option[K[_]]):Option[PMap[K]] =
     for(m<-pMap; k<-key) yield m.removed(k)
-
-  override def subtracted[T](lhs:Option[T], rhs:Option[T])(implicit subtract:Subtract[T]):Option[T] =
-    for(l<-lhs; r<-rhs) yield subtract.subtract(l, r)
 
   override def updatedInPMap[T,K[_]](pMap:Option[PMap[K]], key:Option[K[T]], value:Option[T]):Option[PMap[K]] =
     for(m<-pMap; k<-key; v<-value) yield m.updated(k, v)
