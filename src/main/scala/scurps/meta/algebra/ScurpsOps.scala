@@ -32,11 +32,6 @@ trait ScurpsOps[A[_]] {
   /** Result of applying the given two-parameter arithmetic operation. */
   def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOp2[T1,T2,R]):A[R]
 
-  // TODO optics, see `fp_notes.md`
-  /** Get a value from a given [[PMap]], denoted by the value key. If the map does not contain a value for the key, the
-   * result is undefined. */
-  def getFromPMap[K[_],T](pMap:A[PMap[K]], key:A[K[T]]):A[T]
-
   /** If the given is defined, the given `_then` gets applied to it, returning the result. Otherwise, the result is
    * undefined. */
   def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2]
@@ -49,12 +44,6 @@ trait ScurpsOps[A[_]] {
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
-  /** Wrap the given value in [[A]]. */
-  def pure[T](value:T):A[T]
-
-  /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
-  def orElse[T](value:A[T], defaultValue: =>A[T]):A[T]
-
   // TODO optics, see `fp_notes.md`
   /** Modify the given context, by applying the given function to the value stored for the given context key, returning
    * a new context in which the new value is stored. If the value is not defined in the context, the result is
@@ -62,7 +51,13 @@ trait ScurpsOps[A[_]] {
   def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
 
   /** Result of getting the optional value from the source, undefined if not present */
-  def opticGet[S,T](source:A[S], optic:GetOptional[S,T]):A[T]
+  def opticGet[S,T](source:A[S], optic:A[GetOptional[S,T]]):A[T]
+
+  /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
+  def orElse[T](value:A[T], defaultValue: =>A[T]):A[T]
+
+  /** Wrap the given value in [[A]]. */
+  def pure[T](value:T):A[T]
 
   // TODO optics, see `fp_notes.md`
   /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no

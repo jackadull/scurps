@@ -18,9 +18,6 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:Arithmetic.ArithmeticOp2[T1, T2, R]):Option[R] =
     for(l<-lhs; r<-rhs) yield aop(l, r)
 
-  override def getFromPMap[K[_],T](pMap:Option[PMap[K]], key:Option[K[T]]):Option[T] =
-    for(m<-pMap; k<-key; result<-m.get(k)) yield result
-
   override def ifDefined[T,T2](value:Option[T], _then:Option[T]=>Option[T2]):Option[T2] = value match {
     case v@Some(_) => _then(v)
     case _ => None
@@ -43,8 +40,8 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def modInContext[T](context:Option[GameContext], key:ContextKey[T], f:Option[T]=>Option[T]):Option[GameContext] =
     for(ctx<-context; current<-ctx.get(key); newValue<-f(Some(current))) yield ctx.updated(key, newValue)
 
-  override def opticGet[S,T](source:Option[S], optic:GetOptional[S,T]):Option[T] =
-    for(s<-source; result<-optic.getOptional(s)) yield result
+  override def opticGet[S,T](source:Option[S], optic:Option[GetOptional[S,T]]):Option[T] =
+    for(s<-source; o<-optic; result<-o.getOptional(s)) yield result
 
   override def removedFromPMap[K[_]](pMap:Option[PMap[K]], key:Option[K[_]]):Option[PMap[K]] =
     for(m<-pMap; k<-key) yield m.removed(k)

@@ -37,9 +37,6 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:Arithmetic.ArithmeticOp2[T1,T2,R]):A[R] =
     debug("arithmetic", s"lhs=$lhs, rhs=$rhs, aop=$aop", base.arithmetic(lhs, rhs, aop))
 
-  override def getFromPMap[K[_],T](pMap:A[PMap[K]], key:A[K[T]]):A[T] =
-    debug("getFromPMap", s"pMap=$pMap, key=$key", base.getFromPMap(pMap, key))
-
   override def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2] =
     debug("ifDefined", s"value=$value, _then=???", base.ifDefined(value, _then))
 
@@ -55,7 +52,7 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext] =
     debug("modInContext", s"context=$context, key=$key, f=???", base.modInContext(context, key, f))
 
-  override def opticGet[S,T](source:A[S], optic:GetOptional[S,T]):A[T] =
+  override def opticGet[S,T](source:A[S], optic:A[GetOptional[S,T]]):A[T] =
     debug("opticGet", s"source=$source, optic=$optic", base.opticGet(source, optic))
 
   override def pure[T](value:T):A[T] =
