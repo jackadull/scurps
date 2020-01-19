@@ -1,10 +1,9 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.data.GameContextProperty
-import scurps.meta.data.{GameContext, GameContextProperty, PMap, WrapKey}
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
+import scurps.meta.data.{GameContext, WrapKey}
 import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -44,12 +43,6 @@ trait ScurpsOps[A[_]] {
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
-  // TODO optics, see `fp_notes.md`
-  /** Modify the given context, by applying the given function to the value stored for the given context key, returning
-   * a new context in which the new value is stored. If the value is not defined in the context, the result is
-   * undefined. */
-  def modInContext[T](context:A[GameContext], key:GameContextProperty[T], f:A[T]=>A[T]):A[GameContext]
-
   /** Get the optional value from the source, undefined if not present */
   def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T]
 
@@ -67,11 +60,6 @@ trait ScurpsOps[A[_]] {
 
   /** Wrap the given value in [[A]]. */
   def pure[T](value:T):A[T]
-
-  // TODO optics, see `fp_notes.md`
-  /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no
-   * entry for the key, return the map unchanged. */
-  def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]]
 
   // TODO optics, see `fp_notes.md` (might be a prism?)
   /** Wrap the given value in a key that can be looked up in a [[PMap]]. */

@@ -4,7 +4,7 @@ import scurps.bib.BibRef
 import scurps.meta.data.GameContextProperty
 import scurps.meta.data.{GameContext, GameContextProperty, PMap}
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
-import scurps.meta.algebra.Optic.{OptionGetter, OptionSetter, Setter}
+import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, OptionSetter, Setter}
 
 import scala.language.implicitConversions
 
@@ -23,19 +23,12 @@ trait ScurpsOpsImplicits {
       ops.ifIsOneOf(v, set, _then, _else)
     @inline def ifZero[T2](_then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T], ops:ScurpsOps[A]):A[T2] =
       ops.ifZero(v, _then, _else)
+    @inline def mod[T2](lens:A[OptionLens[T,T2]])(f:A[T2]=>A[T2])(implicit ops:ScurpsOps[A]):A[T] =
+      ops.opticMod(v, lens, f)
     @inline def orElse(defaultValue: =>A[T])(implicit ops:ScurpsOps[A]):A[T] = ops.orElse(v, defaultValue)
     @inline def set[T2](setter:A[Setter[T,T2]], newValue:A[T2])(implicit ops:ScurpsOps[A]):A[T] =
       ops.opticSet(v, setter, newValue)
     @inline def setNonZero[T2](setter:A[OptionSetter[T,T2]], newValue:A[T2])(implicit isZero:IsZero[T2], ops:ScurpsOps[A]):A[T] =
       ops.ifZero(newValue, _then = ops.opticUnset(v, setter), _else = ops.opticSet(v, setter, newValue))
-  }
-
-  final implicit class RichAlgebraicContext[A[+_]](v:A[GameContext]) {
-    @inline def mod[T](contextKey:GameContextProperty[T])(f:A[T]=>A[T])(implicit ops:ScurpsOps[A]):A[GameContext] =
-      ops.modInContext(v, contextKey, f)
-  }
-
-  final implicit class RichAlgebraicPMap[A[+_],K[_]](v:A[PMap[K]]) {
-    @inline def removed(key:A[K[_]])(implicit ops:ScurpsOps[A]):A[PMap[K]] = ops.removedFromPMap(v, key)
   }
 }

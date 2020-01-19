@@ -23,7 +23,7 @@ class BasicAttributesTest extends FreeSpec with Matchers {
       {Strength.set[Option](Score(12), GameContext.basicSet) should be (None)}
   }
   "For an empty subject" - {
-    val context = GameContext.basicSet.updated(Subject, PMap.empty)
+    val context = Subject.set(GameContext.basicSet, PMap.empty)
     "Strength is 10." in
       {Strength[Option](context) should be (Some(Score(10)))}
     "Bought strenght points is 0." in
@@ -38,7 +38,7 @@ class BasicAttributesTest extends FreeSpec with Matchers {
     }
   }
   "Basic attribute CP cost:" - {
-    val context = GameContext.basicSet.updated(Subject, PMap.empty)
+    val context = Subject.set(GameContext.basicSet, PMap.empty)
     "ST 8 costs -20 CP." in {
       val str8 = Strength.set[Option](Score(8), context)
       CPSpentOnBasicAttribute[Option](Strength, str8) should be (Some(CP(-20)))
