@@ -25,7 +25,7 @@ trait ScurpsOpsImplicits {
   }
 
   final implicit class RichAlgebraicContext[A[+_]](v:A[GameContext]) {
-    @inline def get[T](contextKey:ContextKey[T])(implicit ops:ScurpsOps[A]):A[T] = ops.getFromContext(v, contextKey)
+    @inline def get[T](contextKey:ContextKey[T])(implicit ops:ScurpsOps[A]):A[T] = ops.opticGet(v, contextKey)
     @inline def mod[T](contextKey:ContextKey[T])(f:A[T]=>A[T])(implicit ops:ScurpsOps[A]):A[GameContext] =
       ops.modInContext(v, contextKey, f)
   }

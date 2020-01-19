@@ -4,6 +4,7 @@ import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
+import scurps.meta.algebra.Optic.GetOptional
 import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -30,10 +31,6 @@ trait ScurpsOps[A[_]] {
 
   /** Result of applying the given two-parameter arithmetic operation. */
   def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOp2[T1,T2,R]):A[R]
-
-  // TODO optics, see `fp_notes.md`
-  /** Get a context value denoted by key. Is undefined if no value is defined for the key in the context. */
-  def getFromContext[T](context:A[GameContext], key:ContextKey[T]):A[T]
 
   // TODO optics, see `fp_notes.md`
   /** Get a value from a given [[PMap]], denoted by the value key. If the map does not contain a value for the key, the
@@ -63,6 +60,9 @@ trait ScurpsOps[A[_]] {
    * a new context in which the new value is stored. If the value is not defined in the context, the result is
    * undefined. */
   def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
+
+  /** Result of getting the optional value from the source, undefined if not present */
+  def opticGet[S,T](source:A[S], optic:GetOptional[S,T]):A[T]
 
   // TODO optics, see `fp_notes.md`
   /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no

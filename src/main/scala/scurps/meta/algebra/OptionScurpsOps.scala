@@ -1,9 +1,10 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
+import scurps.meta.algebra.Arithmetic.IsZero
+import scurps.meta.algebra.Optic.GetOptional
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.rule.RuleKey
 
 object OptionScurpsOps extends ScurpsOps[Option] {
@@ -16,9 +17,6 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:Arithmetic.ArithmeticOp2[T1, T2, R]):Option[R] =
     for(l<-lhs; r<-rhs) yield aop(l, r)
-
-  override def getFromContext[T](context:Option[GameContext], key:ContextKey[T]):Option[T] =
-    for(ctx<-context; result<-ctx.get(key)) yield result
 
   override def getFromPMap[K[_],T](pMap:Option[PMap[K]], key:Option[K[T]]):Option[T] =
     for(m<-pMap; k<-key; result<-m.get(k)) yield result
@@ -44,6 +42,9 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def modInContext[T](context:Option[GameContext], key:ContextKey[T], f:Option[T]=>Option[T]):Option[GameContext] =
     for(ctx<-context; current<-ctx.get(key); newValue<-f(Some(current))) yield ctx.updated(key, newValue)
+
+  override def opticGet[S,T](source:Option[S], optic:GetOptional[S,T]):Option[T] =
+    for(s<-source; result<-optic.getOptional(s)) yield result
 
   override def removedFromPMap[K[_]](pMap:Option[PMap[K]], key:Option[K[_]]):Option[PMap[K]] =
     for(m<-pMap; k<-key) yield m.removed(k)

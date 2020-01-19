@@ -3,9 +3,10 @@ package scurps.meta.algebra
 import java.util.concurrent.atomic.AtomicInteger
 
 import scurps.bib.BibRef
+import scurps.meta.algebra.Arithmetic.IsZero
+import scurps.meta.algebra.Optic.GetOptional
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.rule.RuleKey
 
 class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
@@ -36,9 +37,6 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:Arithmetic.ArithmeticOp2[T1,T2,R]):A[R] =
     debug("arithmetic", s"lhs=$lhs, rhs=$rhs, aop=$aop", base.arithmetic(lhs, rhs, aop))
 
-  override def getFromContext[T](context:A[GameContext], key:ContextKey[T]):A[T] =
-    debug("getFromContext", s"context=$context, key=$key", base.getFromContext(context, key))
-
   override def getFromPMap[K[_],T](pMap:A[PMap[K]], key:A[K[T]]):A[T] =
     debug("getFromPMap", s"pMap=$pMap, key=$key", base.getFromPMap(pMap, key))
 
@@ -56,6 +54,9 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
 
   override def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext] =
     debug("modInContext", s"context=$context, key=$key, f=???", base.modInContext(context, key, f))
+
+  override def opticGet[S,T](source:A[S], optic:GetOptional[S,T]):A[T] =
+    debug("opticGet", s"source=$source, optic=$optic", base.opticGet(source, optic))
 
   override def pure[T](value:T):A[T] =
     debug("pure", s"value=$value", base.pure(value))
