@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
-import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
+import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.RuleKey
 
@@ -39,8 +39,8 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2] =
     debug("ifDefined", s"value=$value, _then=???", base.ifDefined(value, _then))
 
-  override def ifIsOneOf[T,T2](value:A[T], set:A[Set[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2]):A[T2] =
-    debug("ifIsOneOf", s"value=$value, set=$set, _then=???, _else=???", base.ifIsOneOf(value, set, _then, _else))
+  override def ifIsElement[S,T,T2](source:A[S], element:A[T], _then: =>A[T2], _else: =>A[T2], optic:Element[S,T]):A[T2] =
+    debug("ifIsElement", s"source=$source, element=$element, _then=???, _else=???, optic=$optic", base.ifIsElement(source, element, _then, _else, optic))
 
   override def ifZero[T, T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2] =
     debug("ifZero", s"value=$value, _then=???, _else=???", base.ifZero(value, _then, _else))

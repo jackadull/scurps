@@ -2,7 +2,7 @@ package scurps.meta.algebra
 
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
-import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
+import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.RuleKey
 
@@ -22,8 +22,8 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     case _ => None
   }
 
-  override def ifIsOneOf[T,T2](value:Option[T], set:Option[Set[T]], _then:Option[T]=>Option[T2], _else:Option[T]=>Option[T2]):Option[T2] =
-    for(v<-value; s<-set; result<-if(s.contains(v)) _then(value) else _else(value)) yield result
+  override def ifIsElement[S,T,T2](source:Option[S], element:Option[T], _then: =>Option[T2], _else: =>Option[T2], optic:Element[S,T]):Option[T2] =
+    for(s<-source; e<-element; result<-if(optic.isElement(s, e)) _then else _else) yield result
 
   override def ifZero[T,T2](value:Option[T], _then: =>Option[T2], _else: =>Option[T2])(implicit isZero:IsZero[T]):Option[T2] =
     value match {

@@ -2,7 +2,7 @@ package scurps.meta.algebra
 
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
-import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
+import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.RuleKey
 
@@ -33,12 +33,11 @@ trait ScurpsOps[A[_]] {
 
   /** If the given is defined, the given `_then` gets applied to it, returning the result. Otherwise, the result is
    * undefined. */
-  def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2]
+  def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2] // TODO then parameter not needed
 
-  // TODO optics, see `fp_notes.md`
-  /** If the given value is contained in the given set, the given `_then` gets applied to it, otherwise the given
+  /** If the given element is contained in the given source, the given `_then` gets applied to it, otherwise the given
    * `_else`. */
-  def ifIsOneOf[T,T2](value:A[T], set:A[Set[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2]):A[T2]
+  def ifIsElement[S,T,T2](source:A[S], element:A[T], _then: =>A[T2], _else: =>A[T2], optic:Element[S,T]):A[T2]
 
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]

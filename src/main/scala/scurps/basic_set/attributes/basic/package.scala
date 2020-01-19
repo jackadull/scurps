@@ -24,7 +24,7 @@ package object basic {
     },
     CPCostPerBasicAttributePoint -> new Rule1[BasicAttribute,CP] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[CP] =
-        attribute.ifIsOneOf(Set[BasicAttribute](Strength, Health), _ => 10.cp, _ => 20.cp)
+        attribute.ifElementOf(Set[BasicAttribute](Strength, Health), _ => 10.cp, _ => 20.cp)
           .accordingTo(basicAttributesIntro)
     },
     CPSpentOnBasicAttribute -> new Rule1[BasicAttribute,CP] {
