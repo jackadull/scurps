@@ -4,7 +4,7 @@ import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
-import scurps.meta.algebra.Optic.GetOptional
+import scurps.meta.algebra.Optic.OptionGetter
 import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -51,7 +51,7 @@ trait ScurpsOps[A[_]] {
   def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
 
   /** Result of getting the optional value from the source, undefined if not present */
-  def opticGet[S,T](source:A[S], optic:A[GetOptional[S,T]]):A[T]
+  def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T]
 
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue: =>A[T]):A[T]
