@@ -1,6 +1,5 @@
 package scurps.meta.algebra
 
-sealed trait Optic
 object Optic {
   trait Setter[S,-T] {def set(source:S, newValue:T):S}
   trait Unsetter[S] {def unset(source:S):S}
