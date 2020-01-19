@@ -3,7 +3,7 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.algebra.ArithmeticOp.{ArithmeticOp1, ArithmeticOp2, IsZero}
+import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type

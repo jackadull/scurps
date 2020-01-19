@@ -3,7 +3,7 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.algebra.ArithmeticOp.IsZero
+import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.rule.RuleKey
 
 object OptionScurpsOps extends ScurpsOps[Option] {
@@ -12,9 +12,9 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule.applyP(params, context)) yield result
 
-  override def arithmetic[T1,R](v:Option[T1], aop:ArithmeticOp.ArithmeticOp1[T1,R]):Option[R] = v.map(aop)
+  override def arithmetic[T1,R](v:Option[T1], aop:Arithmetic.ArithmeticOp1[T1,R]):Option[R] = v.map(aop)
 
-  override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:ArithmeticOp.ArithmeticOp2[T1, T2, R]):Option[R] =
+  override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:Arithmetic.ArithmeticOp2[T1, T2, R]):Option[R] =
     for(l<-lhs; r<-rhs) yield aop(l, r)
 
   override def getFromContext[T](context:Option[GameContext], key:ContextKey[T]):Option[T] =

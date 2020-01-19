@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scurps.bib.BibRef
 import scurps.meta.context.{ContextKey, GameContext}
 import scurps.meta.data.{PMap, WrapKey}
-import scurps.meta.algebra.ArithmeticOp.IsZero
+import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.rule.RuleKey
 
 class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
@@ -30,10 +30,10 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
     debug("applyRuleByKey", s"key=$key, params=${debugFmtParams(params)}, context=$context", base.applyRuleByKey(key, params, context))
 
-  override def arithmetic[T1,R](v:A[T1], aop:ArithmeticOp.ArithmeticOp1[T1,R]):A[R] =
+  override def arithmetic[T1,R](v:A[T1], aop:Arithmetic.ArithmeticOp1[T1,R]):A[R] =
     debug("arithmetic", s"v=$v, aop=$aop", base.arithmetic(v, aop))
 
-  override def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOp.ArithmeticOp2[T1,T2,R]):A[R] =
+  override def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:Arithmetic.ArithmeticOp2[T1,T2,R]):A[R] =
     debug("arithmetic", s"lhs=$lhs, rhs=$rhs, aop=$aop", base.arithmetic(lhs, rhs, aop))
 
   override def getFromContext[T](context:A[GameContext], key:ContextKey[T]):A[T] =
