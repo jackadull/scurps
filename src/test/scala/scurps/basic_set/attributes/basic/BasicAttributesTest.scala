@@ -5,7 +5,7 @@ import scurps._
 import scurps.basic_set.attributes.basic.BasicAttribute.{Dexterity, Health, Intelligence, Strength}
 import scurps.meta.algebra.{OptionScurpsOps, ScurpsOps}
 import scurps.meta.data.GameContext.Subject
-import scurps.meta.data.{GameContext, PMap}
+import scurps.meta.data.{GCharacter, GameContext}
 import scurps.meta.unit.{CP, Score}
 
 class BasicAttributesTest extends FreeSpec with Matchers {
@@ -24,7 +24,7 @@ class BasicAttributesTest extends FreeSpec with Matchers {
       {Strength.set[Option](Score(12), GameContext.basicSet) should be (None)}
   }
   "For an empty subject" - {
-    val context = Subject.set(GameContext.basicSet, PMap.empty)
+    val context = Subject.set(GameContext.basicSet, GCharacter.empty)
     "Strength is 10." in
       {Strength[Option](context) should be (Some(Score(10)))}
     "Bought strenght points is 0." in
@@ -39,7 +39,7 @@ class BasicAttributesTest extends FreeSpec with Matchers {
     }
   }
   "Basic attribute CP cost:" - {
-    val context = Subject.set(GameContext.basicSet, PMap.empty)
+    val context = Subject.set(GameContext.basicSet, GCharacter.empty)
     "ST 8 costs -20 CP." in {
       val str8 = Strength.set[Option](Score(8), context)
       CPSpentOnBasicAttribute[Option](Strength, str8) should be (Some(CP(-20)))

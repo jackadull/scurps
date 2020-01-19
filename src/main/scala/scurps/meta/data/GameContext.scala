@@ -12,7 +12,7 @@ object GameContext {
   val basicSet:GameContext = Impl(Map.empty, scurps.basicSetRules)
   val empty:GameContext = Impl(Map.empty, RuleCatalog.empty)
 
-  object Subject extends GameContextProperty[PMap[ValueProperty]] with ShowSingletonKey // TODO check toString
+  object Subject extends GameContextProperty[GCharacter] with ShowSingletonKey // TODO check toString
 
   private final case class Impl(baseMap:Map[GameContextProperty[_],Any], ruleCatalog:RuleCatalog)
   extends GameContext with MapBasedPMap[GameContextProperty,Impl] {
