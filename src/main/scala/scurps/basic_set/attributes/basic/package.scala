@@ -4,10 +4,9 @@ import scurps._
 import scurps.basic_set.attributes.basic.BasicAttribute.{Health, Strength}
 import scurps.basic_set.bib.G4e_Characters.Ch01_Creating_A_Character.Basic_Attributes
 import scurps.meta.algebra.ScurpsOps
-import scurps.meta.context.ContextKey.Subject
-import scurps.meta.context.GameContext
+import scurps.meta.data.GameContext.Subject
 import scurps.meta.data.Score.IntScore
-import scurps.meta.data.{CP, Score}
+import scurps.meta.data.{CP, GameContext, Score}
 import scurps.meta.rule.Rule.{Rule1, Rule2}
 import scurps.meta.rule.RuleCatalog
 

@@ -3,8 +3,8 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic.OptionGetter
-import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.{PMap, WrapKey}
+import scurps.meta.data.GameContextProperty
+import scurps.meta.data.{GameContext, GameContextProperty, PMap, WrapKey}
 import scurps.meta.rule.RuleKey
 
 object OptionScurpsOps extends ScurpsOps[Option] {
@@ -37,7 +37,7 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def pure[T](value:T):Some[T] = Some(value)
 
-  override def modInContext[T](context:Option[GameContext], key:ContextKey[T], f:Option[T]=>Option[T]):Option[GameContext] =
+  override def modInContext[T](context:Option[GameContext], key:GameContextProperty[T], f:Option[T]=>Option[T]):Option[GameContext] =
     for(ctx<-context; current<-ctx.get(key); newValue<-f(Some(current))) yield ctx.updated(key, newValue)
 
   override def opticGet[S,T](source:Option[S], optic:Option[OptionGetter[S,T]]):Option[T] =

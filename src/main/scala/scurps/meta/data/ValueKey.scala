@@ -1,7 +1,6 @@
-package scurps.meta.context
+package scurps.meta.data
 
 import scurps.meta.algebra.Optic.OptionGetter
-import scurps.meta.data.PMap
 import scurps.meta.data.ShowKey.ShowKey
 
 trait ValueKey[T] extends OptionGetter[PMap[ValueKey],T] with ShowKey { // TODO check out toString

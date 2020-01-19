@@ -5,8 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic.OptionGetter
-import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.{PMap, WrapKey}
+import scurps.meta.data.{GameContext, GameContextProperty, PMap, WrapKey}
 import scurps.meta.rule.RuleKey
 
 class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
@@ -49,7 +48,7 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def orElse[T](value:A[T], defaultValue: =>A[T]):A[T] =
     debug("orElse", s"value=$value, defaultValue=???", base.orElse(value, defaultValue))
 
-  override def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext] =
+  override def modInContext[T](context:A[GameContext], key:GameContextProperty[T], f:A[T]=>A[T]):A[GameContext] =
     debug("modInContext", s"context=$context, key=$key, f=???", base.modInContext(context, key, f))
 
   override def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T] =

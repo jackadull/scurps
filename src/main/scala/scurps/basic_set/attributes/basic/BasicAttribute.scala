@@ -2,7 +2,7 @@ package scurps.basic_set.attributes.basic
 
 import scurps._
 import scurps.meta.algebra.ScurpsOps
-import scurps.meta.context.GameContext
+import scurps.meta.data.GameContext
 import scurps.meta.data.Score.IntScore
 import scurps.meta.rule.Rule.{Rule0, Rule1}
 

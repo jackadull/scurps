@@ -1,7 +1,7 @@
 package scurps.meta.rule
 
 import scurps.meta.algebra.ScurpsOps
-import scurps.meta.context.GameContext
+import scurps.meta.data.GameContext
 
 trait Rule[-P[_[_]],+R] {
   def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]

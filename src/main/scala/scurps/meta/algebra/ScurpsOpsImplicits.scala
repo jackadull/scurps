@@ -1,8 +1,8 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.PMap
+import scurps.meta.data.GameContextProperty
+import scurps.meta.data.{GameContext, GameContextProperty, PMap}
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
 import scurps.meta.algebra.Optic.OptionGetter
 
@@ -27,7 +27,7 @@ trait ScurpsOpsImplicits {
   }
 
   final implicit class RichAlgebraicContext[A[+_]](v:A[GameContext]) {
-    @inline def mod[T](contextKey:ContextKey[T])(f:A[T]=>A[T])(implicit ops:ScurpsOps[A]):A[GameContext] =
+    @inline def mod[T](contextKey:GameContextProperty[T])(f:A[T]=>A[T])(implicit ops:ScurpsOps[A]):A[GameContext] =
       ops.modInContext(v, contextKey, f)
   }
 

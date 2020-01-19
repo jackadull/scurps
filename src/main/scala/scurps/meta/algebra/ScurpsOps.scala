@@ -1,8 +1,8 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.context.{ContextKey, GameContext}
-import scurps.meta.data.{PMap, WrapKey}
+import scurps.meta.data.GameContextProperty
+import scurps.meta.data.{GameContext, GameContextProperty, PMap, WrapKey}
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic.OptionGetter
 import scurps.meta.rule.RuleKey
@@ -48,7 +48,7 @@ trait ScurpsOps[A[_]] {
   /** Modify the given context, by applying the given function to the value stored for the given context key, returning
    * a new context in which the new value is stored. If the value is not defined in the context, the result is
    * undefined. */
-  def modInContext[T](context:A[GameContext], key:ContextKey[T], f:A[T]=>A[T]):A[GameContext]
+  def modInContext[T](context:A[GameContext], key:GameContextProperty[T], f:A[T]=>A[T]):A[GameContext]
 
   /** Result of getting the optional value from the source, undefined if not present */
   def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T]
