@@ -3,10 +3,10 @@ package scurps.meta.algebra
 /** An arithmetic operation yielding a certain result. Sub-traits define the arity and parameter types of specific
  * arithmetic operations. Instances of this type are supposed to be passed implicitly, to support abstracing over
  * different arithmetic operations across datatypes. */
-sealed trait ArithmeticOp[+R]
+sealed trait ArithmeticOp
 object ArithmeticOp {
-  sealed trait ArithmeticOp1[-T1,+R] extends (T1=>R)
-  sealed trait ArithmeticOp2[-T1,-T2,+R] extends ((T1,T2)=>R)
+  sealed trait ArithmeticOp1[-T1,+R] extends ArithmeticOp with (T1=>R)
+  sealed trait ArithmeticOp2[-T1,-T2,+R] extends ArithmeticOp with ((T1,T2)=>R)
 
   trait IsZero[T] extends ArithmeticOp1[T,Boolean]
 
