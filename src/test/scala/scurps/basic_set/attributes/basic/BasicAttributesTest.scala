@@ -32,7 +32,7 @@ class BasicAttributesTest extends FreeSpec with Matchers {
     "Free strength points is 10." in
       {FreeAttributeScore[Option](Strength, context) should be (Some(Score(10)))}
     "CP spent on strength is 0." in
-      {CPSpentOnBasicAttribute[Option](Strength, context) should be (Some(CP(0)))}
+      {CPSpentOnBasicAttribute[Option](Strength, context) should be (Some(0.cp))}
     "After setting strength to 8, it remains 8." in {
       val str8 = Strength.set[Option](Score(8), context)
       Strength(str8) should be (Some(Score(8)))
@@ -42,19 +42,19 @@ class BasicAttributesTest extends FreeSpec with Matchers {
     val context = Subject.set(GameContext.basicSet, GCharacter.empty)
     "ST 8 costs -20 CP." in {
       val str8 = Strength.set[Option](Score(8), context)
-      CPSpentOnBasicAttribute[Option](Strength, str8) should be (Some(CP(-20)))
+      CPSpentOnBasicAttribute[Option](Strength, str8) should be (Some(-20.cp))
     }
     "DX 16 costs 120 CP." in {
       val dx16 = Dexterity.set[Option](Score(16), context)
-      CPSpentOnBasicAttribute[Option](Dexterity, dx16) should be (Some(CP(120)))
+      CPSpentOnBasicAttribute[Option](Dexterity, dx16) should be (Some(120.cp))
     }
     "IQ 1 costs -180 CP." in {
       val iq1 = Intelligence.set[Option](Score(1), context)
-      CPSpentOnBasicAttribute[Option](Intelligence, iq1) should be (Some(CP(-180)))
+      CPSpentOnBasicAttribute[Option](Intelligence, iq1) should be (Some(-180.cp))
     }
     "HT 25 costs 150 CP." in {
       val ht25 = Health.set[Option](Score(25), context)
-      CPSpentOnBasicAttribute[Option](Health, ht25) should be (Some(CP(150)))
+      CPSpentOnBasicAttribute[Option](Health, ht25) should be (Some(150.cp))
     }
   }
 }
