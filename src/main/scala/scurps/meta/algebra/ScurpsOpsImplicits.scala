@@ -5,7 +5,9 @@ import scurps.meta.data.GameContextProperty
 import scurps.meta.data.{GameContext, GameContextProperty, PMap}
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
 import scurps.meta.algebra.Optic.{Element, OptionGetter, OptionLens, OptionSetter, Setter}
+import scurps.meta.rule.Rule.Rule0
 
+import scala.collection.IterableOnceOps
 import scala.language.implicitConversions
 
 trait ScurpsOpsImplicits {
@@ -30,5 +32,18 @@ trait ScurpsOpsImplicits {
       ops.opticSet(v, setter, newValue)
     @inline def setNonZero[T2](setter:A[OptionSetter[T,T2]], newValue:A[T2])(implicit isZero:IsZero[T2], ops:ScurpsOps[A]):A[T] =
       ops.ifZero(newValue, _then = ops.opticUnset(v, setter), _else = ops.opticSet(v, setter, newValue))
+  }
+
+  final implicit class RichIterable[A[+_],T](v:A[Iterable[T]]) {
+    @inline def fold[F<:Accumulator[T,F]](f:A[F])(implicit ops:ScurpsOps[A]):A[F] = ops.fold(v, f)
+  }
+
+  final implicit class RichAlgebraicIterableOnceOps[A[+_],T,CC[_],C](v:A[IterableOnceOps[T,CC,C]]) {
+    @inline def map[T2](f:A[T]=>A[T2])(implicit ops:ScurpsOps[A]):A[CC[T2]] = ops.map(v, f)
+  }
+
+  final implicit class RichAlgebraicRule0[A[+_],R](v:A[Rule0[R]]) {
+    @inline def apply(context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
+      ops.applyRule[({type P[A[+_]]=Unit})#P,R](v, (), context)
   }
 }

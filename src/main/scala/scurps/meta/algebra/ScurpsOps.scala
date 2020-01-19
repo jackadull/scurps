@@ -4,7 +4,9 @@ import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
-import scurps.meta.rule.RuleKey
+import scurps.meta.rule.{Rule, RuleKey}
+
+import scala.collection.IterableOnceOps
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
  * constructor [[A]]. It is intentional that it is impossible to "unwrap" an [[A]] instance to get hold of its contents.
@@ -17,6 +19,13 @@ trait ScurpsOps[A[_]] {
   /** Attach a bibliographic reference to the given value. The reference denotes the place where the rule is described
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
+
+
+  /** Calculate the result of the given rule, with the given parameters.
+   *
+   * The implicit [[ScurpsOps]] is passed so that the implementation can pass on the top-level ops instance to the
+   * invoked rule. */
+  def applyRule[P[_[_]],R](rule:A[Rule[P,R]], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 
   /** Calculate the result of the rule denoted by the given key, with the given parameters. If no rule is found in the
    * context's catalog for that key, or if the context is undefined, the result is undefined.
@@ -44,6 +53,10 @@ trait ScurpsOps[A[_]] {
 
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
+
+  /** Convert the given iterable by applying the given collection to all of its elements. If any of the converted
+   * elements are undefined, they are dropped in the result. */
+  def map[T,T2,CC[_],C](iterable:A[IterableOnceOps[T,CC,C]], f:A[T]=>A[T2]):A[CC[T2]]
 
   /** Modify a value, if present. */
   def opticMod[S,T](source:A[S], optic:A[OptionLens[S,T]], f:A[T]=>A[T]):A[S]

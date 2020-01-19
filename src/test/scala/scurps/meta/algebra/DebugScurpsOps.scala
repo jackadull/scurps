@@ -6,7 +6,9 @@ import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
-import scurps.meta.rule.RuleKey
+import scurps.meta.rule.{Rule, RuleKey}
+
+import scala.collection.IterableOnceOps
 
 class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   private val indentation = new AtomicInteger(0)
@@ -26,6 +28,9 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
 
   override def accordingTo[T](value:A[T], ref:BibRef):A[T] =
     debug("accordingTo", s"value=$value, ref=$ref", base.accordingTo(value, ref))
+
+  override def applyRule[P[_[_]],R](rule:A[Rule[P,R]], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
+    debug("applyRule", s"rule=$rule, params=$params, context=$context", base.applyRule(rule, params, context))
 
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
     debug("applyRuleByKey", s"key=$key, params=${debugFmtParams(params)}, context=$context", base.applyRuleByKey(key, params, context))
@@ -47,6 +52,9 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
 
   override def ifZero[T, T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2] =
     debug("ifZero", s"value=$value, _then=???, _else=???", base.ifZero(value, _then, _else))
+
+  override def map[T,T2,CC[_],C](iterable:A[IterableOnceOps[T,CC,C]], f:A[T]=>A[T2]):A[CC[T2]] =
+    debug("map", s"iterable=$iterable, f=???", base.map(iterable, f))
 
   override def orElse[T](value:A[T], defaultValue: =>A[T]):A[T] =
     debug("orElse", s"value=$value, defaultValue=???", base.orElse(value, defaultValue))

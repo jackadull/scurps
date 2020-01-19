@@ -4,10 +4,15 @@ import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
-import scurps.meta.rule.RuleKey
+import scurps.meta.rule.{Rule, RuleKey}
+
+import scala.collection.IterableOnceOps
 
 object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
+
+  override def applyRule[P[_[_]],R](rule:Option[Rule[P,R]], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
+    rule.flatMap(_.applyP(params, context))
 
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule.applyP(params, context)) yield result
@@ -34,6 +39,9 @@ object OptionScurpsOps extends ScurpsOps[Option] {
       case Some(_) => _else
       case None => None
     }
+
+  override def map[T,T2,CC[_],C](iterable:Option[IterableOnceOps[T,CC,C]], f:Option[T]=>Option[T2]):Option[CC[T2]] =
+    iterable.map(i => i.flatMap(v => f(Some(v))))
 
   override def orElse[T](value:Option[T], defaultValue: =>Option[T]):Option[T] = value.orElse(defaultValue)
 
