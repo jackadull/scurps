@@ -10,6 +10,6 @@ final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends GC
 object BoughtBasicAttributePoints
 extends RuleKey1[BasicAttribute,IntScore] with WrapKey[BasicAttribute,BoughtBasicAttributePoints]
 with ShowSingletonKey {
-  override def apply(attribute:BasicAttribute):BoughtBasicAttributePoints = attribute.boughtPointsKey
+  override def apply(attribute:BasicAttribute):BoughtBasicAttributePoints = attribute.boughtPointsProperty
   override def toString:String = super[ShowSingletonKey].toString
 }

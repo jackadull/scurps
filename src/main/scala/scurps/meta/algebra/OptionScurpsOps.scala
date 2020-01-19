@@ -36,11 +36,11 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def pure[T](value:T):Some[T] = Some(value)
 
-  override def opticGet[S,T](source:Option[S], optic:Option[OptionGetter[S,T]]):Option[T] =
-    for(s<-source; o<-optic; result<-o.getOption(s)) yield result
-
   override def opticMod[S,T](source:Option[S], optic:Option[OptionLens[S,T]], f:Option[T]=>Option[T]):Option[S] =
     for(s<-source; o<-optic; v<-o.getOption(s); n<-f(Some(v))) yield o.set(s, n)
+
+  override def opticOptionGet[S,T](source:Option[S], optic:Option[OptionGetter[S,T]]):Option[T] =
+    for(s<-source; o<-optic; result<-o.getOption(s)) yield result
 
   override def opticSet[S,T](source:Option[S], optic:Option[Setter[S,T]], newValue:Option[T]):Option[S] =
     for(s<-source; o<-optic; n<-newValue) yield o.set(s, n)

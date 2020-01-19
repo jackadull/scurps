@@ -48,11 +48,11 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def orElse[T](value:A[T], defaultValue: =>A[T]):A[T] =
     debug("orElse", s"value=$value, defaultValue=???", base.orElse(value, defaultValue))
 
-  override def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T] =
-    debug("opticGet", s"source=$source, optic=$optic", base.opticGet(source, optic))
-
   override def opticMod[S,T](source:A[S], optic:A[OptionLens[S,T]], f:A[T]=>A[T]):A[S] =
     debug("opticMod", s"source=$source, optic=$optic, f=???", base.opticMod(source, optic, f))
+
+  override def opticOptionGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T] =
+    debug("opticGet", s"source=$source, optic=$optic", base.opticOptionGet(source, optic))
 
   override def opticSet[S,T](source:A[S], optic:A[Setter[S,T]], newValue:A[T]):A[S] =
     debug("opticSet", s"source=$source, optic=$optic, newValue=$newValue", base.opticSet(source, optic, newValue))

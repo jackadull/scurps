@@ -2,6 +2,10 @@ package scurps.meta.algebra
 
 object Optic {
   trait Element[-S,-T] {def isElement(source:S, element:T):Boolean}
+  trait Getter[-S,+T] extends OptionGetter[S,T] {
+    def get(source:S):T
+    override def getOption(source:S):Option[T]=Some(get(source))
+  }
   trait Setter[S,-T] {def set(source:S, newValue:T):S}
   trait Unsetter[S] {def unset(source:S):S}
 

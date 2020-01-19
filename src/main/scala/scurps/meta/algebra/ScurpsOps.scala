@@ -42,11 +42,11 @@ trait ScurpsOps[A[_]] {
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
-  /** Get the optional value from the source, undefined if not present */
-  def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T]
-
   /** Modify a value, if present. */
   def opticMod[S,T](source:A[S], optic:A[OptionLens[S,T]], f:A[T]=>A[T]):A[S]
+
+  /** Get an optional value from the source, undefined if not present */
+  def opticOptionGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T]
 
   /** Set the value in the source. */
   def opticSet[S,T](source:A[S], optic:A[Setter[S,T]], newValue:A[T]):A[S]

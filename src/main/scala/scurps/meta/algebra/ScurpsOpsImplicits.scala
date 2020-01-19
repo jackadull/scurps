@@ -17,7 +17,7 @@ trait ScurpsOpsImplicits {
     @inline def :*[T2,R](rhs:A[T2])(implicit multiply:Multiplication[T,T2,R], ops:ScurpsOps[A]):A[R] =
       ops.arithmetic(v, rhs, multiply)
     @inline def accordingTo(ref:BibRef)(implicit ops:ScurpsOps[A]):A[T] = ops.accordingTo(v, ref)
-    @inline def get[R](optic:A[OptionGetter[T,R]])(implicit ops:ScurpsOps[A]):A[R] = ops.opticGet(v, optic)
+    @inline def get[R](optic:A[OptionGetter[T,R]])(implicit ops:ScurpsOps[A]):A[R] = ops.opticOptionGet(v, optic)
     @inline def ifDefined[T2](_then:A[T]=>A[T2])(implicit ops:ScurpsOps[A]):A[T2] = ops.ifDefined(v, _then(v))
     @inline def ifElementOf[S,T2](source:A[S], _then:A[T]=>A[T2], _else:A[T]=>A[T2])(implicit optic:Element[S,T], ops:ScurpsOps[A]):A[T2] =
       ops.ifIsElement(source, v, _then(v), _else(v), optic)
