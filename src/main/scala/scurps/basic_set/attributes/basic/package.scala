@@ -1,7 +1,7 @@
 package scurps.basic_set.attributes
 
 import scurps._
-import scurps.basic_set.attributes.basic.BasicAttribute.{Health, Strength}
+import scurps.basic_set.attributes.basic.BasicAttribute.{BoughtPointsProperty, Health, Strength}
 import scurps.basic_set.bib.G4e_Characters.Ch01_Creating_A_Character.Basic_Attributes
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.data.GameContext
@@ -20,7 +20,7 @@ package object basic {
     },
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        context.get(Subject).ifDefined(_.get(BoughtBasicAttributePoints.of(attribute)).orElse(Score(0)))
+        context.get(Subject).ifDefined(_.get(attribute.get(BoughtPointsProperty)).orElse(Score(0)))
     },
     CPCostPerBasicAttributePoint -> new Rule1[BasicAttribute,CP] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[CP] =
@@ -37,7 +37,7 @@ package object basic {
     },
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](attribute:A[BasicAttribute], newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
-        val boughtPointsKey = BoughtBasicAttributePoints.of(attribute)
+        val boughtPointsKey = attribute.get(BoughtPointsProperty)
         context.mod(Subject) {_.setNonZero(boughtPointsKey, newScore :- FreeAttributeScore(attribute, context))}
       }
     }

@@ -59,8 +59,4 @@ trait ScurpsOps[A[_]] {
 
   /** Wrap the given value in [[A]]. */
   def pure[T](value:T):A[T]
-
-  // TODO optics, see `fp_notes.md` (might be a prism?)
-  /** Wrap the given value in a key that can be looked up in a [[PMap]]. */
-  def wrapKey[T,K](value:A[T], wrap:WrapKey[T,K]):A[K]
 }

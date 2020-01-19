@@ -62,7 +62,4 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
 
   override def pure[T](value:T):A[T] =
     debug("pure", s"value=$value", base.pure(value))
-
-  override def wrapKey[T,K](value:A[T], wrap:WrapKey[T,K]):A[K] =
-    debug("wrapKey", s"value=$value, wrap=$wrap", base.wrapKey(value, wrap))
 }

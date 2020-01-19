@@ -47,6 +47,4 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def opticUnset[S](source:Option[S], optic:Option[Unsetter[S]]):Option[S] =
     for(s<-source; o<-optic) yield o.unset(s)
-
-  override def wrapKey[T,K](value:Option[T], wrap:WrapKey[T,K]):Option[K] = value.map(wrap)
 }
