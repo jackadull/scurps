@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
-import scurps.meta.data.{GameContext, WrapKey}
+import scurps.meta.data.GameContext
 import scurps.meta.rule.RuleKey
 
 class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {

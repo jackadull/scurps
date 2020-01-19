@@ -1,6 +1,4 @@
-package scurps.meta.data
-
-import scurps.meta.algebra.ScurpsOps
+package scurps.meta.algebra
 
 // TODO optics, see `fp_notes.md`
 trait WrapKey[-T,+K] extends (T=>K) {
