@@ -17,6 +17,9 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:Arithmetic.ArithmeticOp2[T1, T2, R]):Option[R] =
     for(l<-lhs; r<-rhs) yield aop(l, r)
 
+  override def fold[T,F<:Accumulator[T,F]](iterable:Option[Iterable[T]], f:Option[F]):Option[F] =
+    for(i<-iterable; ff<-f) yield i.foldLeft(ff) {(acc, value) => acc.accumulate(value)}
+
   override def ifDefined[T,T2](value:Option[T], _then: =>Option[T2]):Option[T2] = value match {
     case v@Some(_) => _then
     case _ => None

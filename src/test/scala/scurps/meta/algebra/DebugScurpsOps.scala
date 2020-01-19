@@ -36,6 +36,9 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:Arithmetic.ArithmeticOp2[T1,T2,R]):A[R] =
     debug("arithmetic", s"lhs=$lhs, rhs=$rhs, aop=$aop", base.arithmetic(lhs, rhs, aop))
 
+  override def fold[T,F<:Accumulator[T,F]](iterable:A[Iterable[T]], f:A[F]):A[F] =
+    debug("fold", s"iterable=$iterable, f=$f", base.fold(iterable, f))
+
   override def ifDefined[T,T2](value:A[T], _then: =>A[T2]):A[T2] =
     debug("ifDefined", s"value=$value, _then=???", base.ifDefined(value, _then))
 

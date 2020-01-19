@@ -31,6 +31,9 @@ trait ScurpsOps[A[_]] {
   /** Result of applying the given two-parameter arithmetic operation. */
   def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOp2[T1,T2,R]):A[R]
 
+  /** Accumulate the values of the given iterable. */
+  def fold[T,F<:Accumulator[T,F]](iterable:A[Iterable[T]], f:A[F]):A[F]
+
   /** If the given is defined, the given `_then` gets applied to it, returning the result. Otherwise, the result is
    * undefined. */
   def ifDefined[T,T2](value:A[T], _then: =>A[T2]):A[T2]
