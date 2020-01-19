@@ -1,10 +1,10 @@
 package scurps.basic_set.attributes.basic
 
 import scurps.meta.algebra.WrapKey
-import scurps.meta.data.Score.IntScore
 import scurps.meta.data.ShowKey.{ShowProductKey, ShowSingletonKey}
 import scurps.meta.data.ValueKey
 import scurps.meta.rule.RuleKey.RuleKey1
+import scurps.meta.unit.Score.IntScore
 
 final case class BoughtBasicAttributePoints(attribute:BasicAttribute) extends ValueKey[IntScore] with ShowProductKey
 object BoughtBasicAttributePoints

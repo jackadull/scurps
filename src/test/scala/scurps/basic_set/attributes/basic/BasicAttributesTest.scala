@@ -5,7 +5,8 @@ import scurps._
 import scurps.basic_set.attributes.basic.BasicAttribute.{Dexterity, Health, Intelligence, Strength}
 import scurps.meta.algebra.{OptionScurpsOps, ScurpsOps}
 import scurps.meta.data.GameContext.Subject
-import scurps.meta.data.{CP, GameContext, PMap, Score}
+import scurps.meta.data.{GameContext, PMap}
+import scurps.meta.unit.{CP, Score}
 
 class BasicAttributesTest extends FreeSpec with Matchers {
   implicit val scurpsOps:ScurpsOps[Option] = OptionScurpsOps

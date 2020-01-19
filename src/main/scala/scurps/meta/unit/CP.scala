@@ -1,7 +1,7 @@
-package scurps.meta.data
+package scurps.meta.unit
 
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
-import scurps.meta.data.Score.IntScore
+import scurps.meta.unit.Score.IntScore
 
 /** Character points. They only come in integer values. */
 final case class CP(intValue:Int) extends AnyVal

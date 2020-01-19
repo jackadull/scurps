@@ -1,4 +1,4 @@
-package scurps.meta.data
+package scurps.meta.unit
 
 trait CPImplicits {
   final implicit class RichInt(v:Int) {
