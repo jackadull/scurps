@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
-import scurps.meta.algebra.Optic.OptionGetter
+import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
 import scurps.meta.data.{GameContext, GameContextProperty, PMap, WrapKey}
 import scurps.meta.rule.RuleKey
 
@@ -54,14 +54,20 @@ class DebugScurpsOps[A[_]](base:ScurpsOps[A]) extends ScurpsOps[A] {
   override def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T] =
     debug("opticGet", s"source=$source, optic=$optic", base.opticGet(source, optic))
 
+  override def opticMod[S,T](source:A[S], optic:A[OptionLens[S,T]], f:A[T]=>A[T]):A[S] =
+    debug("opticMod", s"source=$source, optic=$optic, f=???", base.opticMod(source, optic, f))
+
+  override def opticSet[S,T](source:A[S], optic:A[Setter[S,T]], newValue:A[T]):A[S] =
+    debug("opticSet", s"source=$source, optic=$optic, newValue=$newValue", base.opticSet(source, optic, newValue))
+
+  override def opticUnset[S](source:A[S], optic:A[Unsetter[S]]):A[S] =
+    debug("opticUnset", s"source=$source, optic=$optic", base.opticUnset(source, optic))
+
   override def pure[T](value:T):A[T] =
     debug("pure", s"value=$value", base.pure(value))
 
   override def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]] =
     debug("removedFromPMap", s"pMap=$pMap, key=$key", base.removedFromPMap[K](pMap, key))
-
-  override def updatedInPMap[T,K[_]](pMap:A[PMap[K]], key:A[K[T]], value:A[T]):A[PMap[K]] =
-    debug("updatedInPMap", s"pMap=$pMap, key=$key, value=$value", base.updatedInPMap(pMap, key, value))
 
   override def wrapKey[T,K](value:A[T], wrap:WrapKey[T,K]):A[K] =
     debug("wrapKey", s"value=$value, wrap=$wrap", base.wrapKey(value, wrap))

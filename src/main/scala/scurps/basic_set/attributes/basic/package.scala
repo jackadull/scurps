@@ -37,7 +37,7 @@ package object basic {
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](attribute:A[BasicAttribute], newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
         val boughtPointsKey = BoughtBasicAttributePoints.of(attribute)
-        context.mod(Subject) {_.updatedNonZero(boughtPointsKey, newScore :- FreeAttributeScore(attribute, context))}
+        context.mod(Subject) {_.setNonZero(boughtPointsKey, newScore :- FreeAttributeScore(attribute, context))}
       }
     }
   )

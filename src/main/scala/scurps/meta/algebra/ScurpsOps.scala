@@ -4,7 +4,7 @@ import scurps.bib.BibRef
 import scurps.meta.data.GameContextProperty
 import scurps.meta.data.{GameContext, GameContextProperty, PMap, WrapKey}
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
-import scurps.meta.algebra.Optic.OptionGetter
+import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
 import scurps.meta.rule.RuleKey
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
@@ -50,8 +50,17 @@ trait ScurpsOps[A[_]] {
    * undefined. */
   def modInContext[T](context:A[GameContext], key:GameContextProperty[T], f:A[T]=>A[T]):A[GameContext]
 
-  /** Result of getting the optional value from the source, undefined if not present */
+  /** Get the optional value from the source, undefined if not present */
   def opticGet[S,T](source:A[S], optic:A[OptionGetter[S,T]]):A[T]
+
+  /** Modify a value, if present. */
+  def opticMod[S,T](source:A[S], optic:A[OptionLens[S,T]], f:A[T]=>A[T]):A[S]
+
+  /** Set the value in the source. */
+  def opticSet[S,T](source:A[S], optic:A[Setter[S,T]], newValue:A[T]):A[S]
+
+  /** Unset a value in the source. */
+  def opticUnset[S](source:A[S], optic:A[Unsetter[S]]):A[S]
 
   /** Leave the given value untouched if defined, or return the other given value in case it is undefined. */
   def orElse[T](value:A[T], defaultValue: =>A[T]):A[T]
@@ -63,11 +72,6 @@ trait ScurpsOps[A[_]] {
   /** Remove the entry from the given [[PMap]], defined by its key. Return the modified [[PMap]]. If the there is no
    * entry for the key, return the map unchanged. */
   def removedFromPMap[K[_]](pMap:A[PMap[K]], key:A[K[_]]):A[PMap[K]]
-
-  // TODO optics, see `fp_notes.md`
-  /** Update the entry for the given key in the [[PMap]], returning the modified map. If there already is a value
-   * stored for the key, it gets overwritten. Otherwise, a new entry is added. */
-  def updatedInPMap[T,K[_]](pMap:A[PMap[K]], key:A[K[T]], value:A[T]):A[PMap[K]]
 
   // TODO optics, see `fp_notes.md` (might be a prism?)
   /** Wrap the given value in a key that can be looked up in a [[PMap]]. */

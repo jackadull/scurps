@@ -2,8 +2,7 @@ package scurps.meta.algebra
 
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.IsZero
-import scurps.meta.algebra.Optic.OptionGetter
-import scurps.meta.data.GameContextProperty
+import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, Setter, Unsetter}
 import scurps.meta.data.{GameContext, GameContextProperty, PMap, WrapKey}
 import scurps.meta.rule.RuleKey
 
@@ -41,13 +40,19 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     for(ctx<-context; current<-ctx.get(key); newValue<-f(Some(current))) yield ctx.updated(key, newValue)
 
   override def opticGet[S,T](source:Option[S], optic:Option[OptionGetter[S,T]]):Option[T] =
-    for(s<-source; o<-optic; result<-o.getOptional(s)) yield result
+    for(s<-source; o<-optic; result<-o.getOption(s)) yield result
+
+  override def opticMod[S,T](source:Option[S], optic:Option[OptionLens[S,T]], f:Option[T]=>Option[T]):Option[S] =
+    for(s<-source; o<-optic; v<-o.getOption(s); n<-f(Some(v))) yield o.set(s, n)
+
+  override def opticSet[S,T](source:Option[S], optic:Option[Setter[S,T]], newValue:Option[T]):Option[S] =
+    for(s<-source; o<-optic; n<-newValue) yield o.set(s, n)
+
+  override def opticUnset[S](source:Option[S], optic:Option[Unsetter[S]]):Option[S] =
+    for(s<-source; o<-optic) yield o.unset(s)
 
   override def removedFromPMap[K[_]](pMap:Option[PMap[K]], key:Option[K[_]]):Option[PMap[K]] =
     for(m<-pMap; k<-key) yield m.removed(k)
-
-  override def updatedInPMap[T,K[_]](pMap:Option[PMap[K]], key:Option[K[T]], value:Option[T]):Option[PMap[K]] =
-    for(m<-pMap; k<-key; v<-value) yield m.updated(k, v)
 
   override def wrapKey[T,K](value:Option[T], wrap:WrapKey[T,K]):Option[K] = value.map(wrap)
 }
