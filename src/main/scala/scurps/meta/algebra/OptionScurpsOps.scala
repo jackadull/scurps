@@ -17,8 +17,8 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:Arithmetic.ArithmeticOp2[T1, T2, R]):Option[R] =
     for(l<-lhs; r<-rhs) yield aop(l, r)
 
-  override def ifDefined[T,T2](value:Option[T], _then:Option[T]=>Option[T2]):Option[T2] = value match {
-    case v@Some(_) => _then(v)
+  override def ifDefined[T,T2](value:Option[T], _then: =>Option[T2]):Option[T2] = value match {
+    case v@Some(_) => _then
     case _ => None
   }
 

@@ -33,7 +33,7 @@ trait ScurpsOps[A[_]] {
 
   /** If the given is defined, the given `_then` gets applied to it, returning the result. Otherwise, the result is
    * undefined. */
-  def ifDefined[T,T2](value:A[T], _then:A[T]=>A[T2]):A[T2] // TODO then parameter not needed
+  def ifDefined[T,T2](value:A[T], _then: =>A[T2]):A[T2]
 
   /** If the given element is contained in the given source, the given `_then` gets applied to it, otherwise the given
    * `_else`. */
