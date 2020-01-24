@@ -20,7 +20,6 @@ trait ScurpsOps[A[_]] {
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
 
-
   /** Calculate the result of the given rule, with the given parameters.
    *
    * The implicit [[ScurpsOps]] is passed so that the implementation can pass on the top-level ops instance to the
