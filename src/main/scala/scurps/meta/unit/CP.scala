@@ -13,7 +13,7 @@ final case class CP(intValue:Int) extends AnyVal {
 object CP {
   implicit val cpAddition:Addition[CP] = new Addition[CP] {
     override def apply(lhs:CP, rhs:CP):CP = CP(lhs.intValue + rhs.intValue)
-    override def toString():String = "Addition[CP]"
+    override def toString():String = "+[CP]"
   }
   implicit val cpIsZero:IsZero[CP] = new IsZero[CP] {
     override def apply(v:CP):Boolean = v.intValue==0
@@ -21,10 +21,10 @@ object CP {
   }
   implicit val cpSubtraction:Subtraction[CP] = new Subtraction[CP] {
     override def apply(lhs:CP, rhs:CP):CP = CP(lhs.intValue - rhs.intValue)
-    override def toString():String = "Subtraction[CP]"
+    override def toString():String = "-[CP]"
   }
   implicit val cpWithIntScoreMultiplication:Multiplication[CP,IntScore,CP] = new Multiplication[CP,IntScore,CP] {
     override def apply(lhs:CP, rhs:IntScore):CP = CP(lhs.intValue * rhs.intValue)
-    override def toString():String = "Multiplication[CP,IntScore,CP]"
+    override def toString():String = "*[CP,IntScore,CP]"
   }
 }
