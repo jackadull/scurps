@@ -1,5 +1,6 @@
 package scurps.meta.algebra
 
+// TODO replace all of this with semantics
 object Optic {
   trait Getter[-S,+T] extends OptionGetter[S,T] {
     def get(source:S):T

@@ -5,12 +5,25 @@ import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.ElementSemantics
+import scurps.meta.semantics.{ConsSemantics, ElementSemantics}
 
+import scala.annotation.tailrec
 import scala.collection.IterableOnceOps
 
 object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
+
+  @tailrec override final def accumulate[C[_],T,F<:Accumulator[T,F]](cons:Option[C[T]], f:Option[F])(implicit consSemantics:ConsSemantics[C]):Option[F] =
+    cons match {
+      case None => None
+      case Some(c) => consSemantics.headOption(c) match {
+        case None => f
+        case Some(h) => f match {
+          case None => None
+          case Some(a) => accumulate(consSemantics.tailOption(c), Some(a.accumulate(h)))
+        }
+      }
+    }
 
   override def applyRule[P[_[_]],R](rule:Option[Rule[P,R]], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     rule.flatMap(_.applyP(params, context))
@@ -22,9 +35,6 @@ object OptionScurpsOps extends ScurpsOps[Option] {
 
   override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:Arithmetic.ArithmeticOp2[T1, T2, R]):Option[R] =
     for(l<-lhs; r<-rhs) yield aop(l, r)
-
-  override def fold[T,F<:Accumulator[T,F]](iterable:Option[Iterable[T]], f:Option[F]):Option[F] =
-    for(i<-iterable; ff<-f) yield i.foldLeft(ff) {(acc, value) => acc.accumulate(value)}
 
   override def ifDefined[T,T2](value:Option[T], _then: =>Option[T2]):Option[T2] = value match {
     case Some(_) => _then

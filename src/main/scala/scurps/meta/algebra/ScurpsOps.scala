@@ -5,7 +5,7 @@ import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.ElementSemantics
+import scurps.meta.semantics.{ConsSemantics, ElementSemantics}
 
 import scala.collection.IterableOnceOps
 
@@ -21,6 +21,10 @@ trait ScurpsOps[A[_]] {
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
 
+  // TODO AccumulatorSemantics
+  /** Accumulate the values of the given collection. */
+  def accumulate[C[_],T,F<:Accumulator[T,F]](cons:A[C[T]], f:A[F])(implicit consSemantics:ConsSemantics[C]):A[F]
+
   /** Calculate the result of the given rule, with the given parameters.
    *
    * The implicit [[ScurpsOps]] is passed so that the implementation can pass on the top-level ops instance to the
@@ -34,28 +38,24 @@ trait ScurpsOps[A[_]] {
    * invoked rule. */
   def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 
-  /** Result of applying the given single-parameter arithmetic operation. */
+  /** Single-parameter arithmetic operation. */
   def arithmetic[T1,R](v:A[T1], aop:ArithmeticOp1[T1,R]):A[R]
 
-  /** Result of applying the given two-parameter arithmetic operation. */
+  /** Two-parameter arithmetic operation. */
   def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOp2[T1,T2,R]):A[R]
 
-  /** Accumulate the values of the given iterable. */
-  def fold[T,F<:Accumulator[T,F]](iterable:A[Iterable[T]], f:A[F]):A[F]
-
-  /** If the given is defined, the given `_then` gets applied to it, returning the result. Otherwise, the result is
-   * undefined. */
+  /** If the given value is defined, the given `_then` gets returned. Otherwise, the result is undefined. */
   def ifDefined[T,T2](value:A[T], _then: =>A[T2]):A[T2]
 
-  /** If the given element is contained in the given collection, the result of `_then` gets returned, otherwise the
-   *  given `_else`. */
+  /** If the given element is contained in the given collection, the given `_then` gets returned, otherwise the given
+   * `_else`. */
   def ifIsElement[C[_],T,T2](collection:A[C[T]], element:A[T], _then: =>A[T2], _else: =>A[T2], elementSemantics:ElementSemantics[C]):A[T2]
 
-  /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
+  /** If the given value is zero, the given `_then` gets returned, or otherwise the given `_else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
-  /** Convert the given iterable by applying the given collection to all of its elements. If any of the converted
-   * elements are undefined, they are dropped in the result. */
+  /** Convert the given iterable by applying the given function to all of its elements. If any of the converted elements
+   * are undefined, they are dropped in the result. */
   def map[T,T2,CC[_],C](iterable:A[IterableOnceOps[T,CC,C]], f:A[T]=>A[T2]):A[CC[T2]]
 
   /** Modify a value, if present. */
