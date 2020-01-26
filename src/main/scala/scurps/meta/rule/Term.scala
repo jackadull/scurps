@@ -6,6 +6,7 @@ import scurps.meta.algebra.ScurpsOps
 import scurps.meta.rule.AlgebraicTerm._
 import scurps.meta.rule.Term.{Term0, Term1}
 
+// TODO rename to Expr
 trait Term[-P[_[_]],+R] {
   def apply[A[+_]](params:P[A])(implicit algebra:ScurpsOps[A]):A[R]
   override def toString:String = "<term>"
