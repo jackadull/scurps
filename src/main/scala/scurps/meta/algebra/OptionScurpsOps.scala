@@ -5,6 +5,7 @@ import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
+import scurps.meta.semantics.ElementSemantics
 
 import scala.collection.IterableOnceOps
 
@@ -26,12 +27,12 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     for(i<-iterable; ff<-f) yield i.foldLeft(ff) {(acc, value) => acc.accumulate(value)}
 
   override def ifDefined[T,T2](value:Option[T], _then: =>Option[T2]):Option[T2] = value match {
-    case v@Some(_) => _then
+    case Some(_) => _then
     case _ => None
   }
 
-  override def ifIsElement[S,T,T2](source:Option[S], element:Option[T], _then: =>Option[T2], _else: =>Option[T2], optic:Element[S,T]):Option[T2] =
-    for(s<-source; e<-element; result<-if(optic.isElement(s, e)) _then else _else) yield result
+  override def ifIsElement[C[_],T,T2](collection:Option[C[T]], element:Option[T], _then: =>Option[T2], _else: =>Option[T2], elementSemantics:ElementSemantics[C]):Option[T2] =
+    for(c<-collection; e<-element; result<-if(elementSemantics.isElement(c, e)) _then else _else) yield result
 
   override def ifZero[T,T2](value:Option[T], _then: =>Option[T2], _else: =>Option[T2])(implicit isZero:IsZero[T]):Option[T2] =
     value match {

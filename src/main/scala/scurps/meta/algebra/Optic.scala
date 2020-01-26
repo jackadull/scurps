@@ -1,7 +1,6 @@
 package scurps.meta.algebra
 
 object Optic {
-  trait Element[-S,-T] {def isElement(source:S, element:T):Boolean}
   trait Getter[-S,+T] extends OptionGetter[S,T] {
     def get(source:S):T
     override def getOption(source:S):Option[T]=Some(get(source))
@@ -14,14 +13,5 @@ object Optic {
 
   trait OptionLens[S,T] extends OptionGetter[S,T] with OptionSetter[S,T] {
     def mod(source:S, f:T=>T):S = getOption(source).map(v => set(source, f(v))).getOrElse(source)
-  }
-
-  object Element {
-    implicit def setElement[A]:Element[Set[A],A] = SetElementImpl.asInstanceOf[Element[Set[A],A]]
-
-    private object SetElementImpl extends Element[Set[Any],Any] {
-      override def isElement(source:Set[Any], element:Any):Boolean = source.contains(element)
-      override def toString:String = "Element[Set[_],_]"
-    }
   }
 }

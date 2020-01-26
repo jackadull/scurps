@@ -5,6 +5,7 @@ import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
+import scurps.meta.semantics.ElementSemantics
 
 import scala.collection.IterableOnceOps
 
@@ -19,7 +20,6 @@ trait ScurpsOps[A[_]] {
   /** Attach a bibliographic reference to the given value. The reference denotes the place where the rule is described
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
-
 
   /** Calculate the result of the given rule, with the given parameters.
    *
@@ -47,9 +47,9 @@ trait ScurpsOps[A[_]] {
    * undefined. */
   def ifDefined[T,T2](value:A[T], _then: =>A[T2]):A[T2]
 
-  /** If the given element is contained in the given source, the given `_then` gets applied to it, otherwise the given
-   * `_else`. */
-  def ifIsElement[S,T,T2](source:A[S], element:A[T], _then: =>A[T2], _else: =>A[T2], optic:Element[S,T]):A[T2]
+  /** If the given element is contained in the given collection, the result of `_then` gets returned, otherwise the
+   *  given `_else`. */
+  def ifIsElement[C[_],T,T2](collection:A[C[T]], element:A[T], _then: =>A[T2], _else: =>A[T2], elementSemantics:ElementSemantics[C]):A[T2]
 
   /** If the given value is zero, the given `then` gets returned, or otherwise the given `else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]

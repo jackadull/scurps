@@ -4,8 +4,9 @@ import scurps.bib.BibRef
 import scurps.meta.data.GameContextProperty
 import scurps.meta.data.{GameContext, GameContextProperty, PMap}
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
-import scurps.meta.algebra.Optic.{Element, OptionGetter, OptionLens, OptionSetter, Setter}
+import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, OptionSetter, Setter}
 import scurps.meta.rule.Rule.Rule0
+import scurps.meta.semantics.ElementSemantics
 
 import scala.collection.IterableOnceOps
 import scala.language.implicitConversions
@@ -21,8 +22,8 @@ trait ScurpsOpsImplicits {
     @inline def accordingTo(ref:BibRef)(implicit ops:ScurpsOps[A]):A[T] = ops.accordingTo(v, ref)
     @inline def get[R](optic:A[OptionGetter[T,R]])(implicit ops:ScurpsOps[A]):A[R] = ops.opticOptionGet(v, optic)
     @inline def ifDefined[T2](_then:A[T]=>A[T2])(implicit ops:ScurpsOps[A]):A[T2] = ops.ifDefined(v, _then(v))
-    @inline def ifElementOf[S,T2](source:A[S], _then:A[T]=>A[T2], _else:A[T]=>A[T2])(implicit optic:Element[S,T], ops:ScurpsOps[A]):A[T2] =
-      ops.ifIsElement(source, v, _then(v), _else(v), optic)
+    @inline def ifElementOf[C[_],T2](collection:A[C[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2])(implicit elementSemantics:ElementSemantics[C], ops:ScurpsOps[A]):A[T2] =
+      ops.ifIsElement(collection, v, _then(v), _else(v), elementSemantics)
     @inline def ifZero[T2](_then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T], ops:ScurpsOps[A]):A[T2] =
       ops.ifZero(v, _then, _else)
     @inline def mod[T2](lens:A[OptionLens[T,T2]])(f:A[T2]=>A[T2])(implicit ops:ScurpsOps[A]):A[T] =
