@@ -6,7 +6,7 @@ import scurps.meta.data.{GameContext, GameContextProperty, PMap}
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
 import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, OptionSetter, Setter}
 import scurps.meta.rule.Rule.Rule0
-import scurps.meta.semantics.{Accumulate, Cons, IsElement, Uncons}
+import scurps.meta.algebra.Semantic.{Accumulate, Cons, IsElement, Uncons}
 
 import scala.collection.IterableOnceOps
 import scala.language.implicitConversions

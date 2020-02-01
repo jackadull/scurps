@@ -1,7 +1,7 @@
 package scurps.meta.unit
 
 import scurps._
-import scurps.meta.semantics.Accumulate
+import scurps.meta.algebra.Semantic.Accumulate
 
 final case class CPBalance(sumOfNegatives:CP = 0.cp, sumOfPositives:CP = 0.cp) {
   def accumulate(value:CP):CPBalance =
