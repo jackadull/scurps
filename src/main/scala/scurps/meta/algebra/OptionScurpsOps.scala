@@ -5,10 +5,9 @@ import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.{AccumulatorSemantics, ElementSemantics, UnconsSemantics}
+import scurps.meta.semantics.{AccumulatorSemantics, ConsSemantics, ElementSemantics, UnconsSemantics}
 
 import scala.annotation.tailrec
-import scala.collection.IterableOnceOps
 
 object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
@@ -51,8 +50,17 @@ object OptionScurpsOps extends ScurpsOps[Option] {
       case None => None
     }
 
-  override def map[T,T2,CC[_],C](iterable:Option[IterableOnceOps[T,CC,C]], f:Option[T]=>Option[T2]):Option[CC[T2]] =
-    iterable.map(i => i.flatMap(v => f(Some(v))))
+  // TODO will this be reversed?
+  override def map[T,T2,C[_]](collection:Option[C[T]], f:Option[T]=>Option[T2], consSemantics:ConsSemantics[C], unconsSemantics:UnconsSemantics[C]):Option[C[T2]] = {
+    @tailrec def recurse(remaining:C[T], soFar:C[T2]):Option[C[T2]] = unconsSemantics.uncons(remaining) match {
+      case None => Some(soFar)
+      case Some((head, tail)) => f(Some(head)) match {
+        case None => None
+        case Some(head2) => recurse(tail, consSemantics.cons(head2, soFar))
+      }
+    }
+    collection.flatMap(c => recurse(c, consSemantics.empty))
+  }
 
   override def orElse[T](value:Option[T], defaultValue: =>Option[T]):Option[T] = value.orElse(defaultValue)
 

@@ -5,9 +5,7 @@ import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.{AccumulatorSemantics, ElementSemantics, UnconsSemantics}
-
-import scala.collection.IterableOnceOps
+import scurps.meta.semantics.{AccumulatorSemantics, ConsSemantics, ElementSemantics, UnconsSemantics}
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
  * constructor [[A]]. It is intentional that it is impossible to "unwrap" an [[A]] instance to get hold of its contents.
@@ -16,7 +14,7 @@ import scala.collection.IterableOnceOps
  * operations, in order to make them human readable.
  *
  * Formally, this is an algebra. It is intended to be passed around implicitly. */
-trait ScurpsOps[A[_]] {
+trait ScurpsOps[A[_]] { // TODO make consistent which parameters to pass implicitly and which not
   /** Attach a bibliographic reference to the given value. The reference denotes the place where the rule is described
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
@@ -53,9 +51,9 @@ trait ScurpsOps[A[_]] {
   /** If the given value is zero, the given `_then` gets returned, or otherwise the given `_else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
-  /** Convert the given iterable by applying the given function to all of its elements. If any of the converted elements
-   * are undefined, they are dropped in the result. */
-  def map[T,T2,CC[_],C](iterable:A[IterableOnceOps[T,CC,C]], f:A[T]=>A[T2]):A[CC[T2]]
+  /** Convert the given collection by applying the given function to all of its elements. If any of the converted
+   * elements ends up as undefined when converted, the result is undefined. */
+  def map[T,T2,C[_]](collection:A[C[T]], f:A[T]=>A[T2], consSemantics:ConsSemantics[C], unconsSemantics:UnconsSemantics[C]):A[C[T2]]
 
   /** Modify a value, if present. */
   def opticMod[S,T](source:A[S], optic:A[OptionLens[S,T]], f:A[T]=>A[T]):A[S]

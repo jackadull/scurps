@@ -6,7 +6,7 @@ import scurps.meta.data.{GameContext, GameContextProperty, PMap}
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
 import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, OptionSetter, Setter}
 import scurps.meta.rule.Rule.Rule0
-import scurps.meta.semantics.{AccumulatorSemantics, ElementSemantics}
+import scurps.meta.semantics.{AccumulatorSemantics, ConsSemantics, ElementSemantics, UnconsSemantics}
 
 import scala.collection.IterableOnceOps
 import scala.language.implicitConversions
@@ -35,12 +35,11 @@ trait ScurpsOpsImplicits {
       ops.ifZero(newValue, _then = ops.opticUnset(v, setter), _else = ops.opticSet(v, setter, newValue))
   }
 
-  final implicit class RichIterable[A[+_],T](v:A[Iterable[T]]) {
-    @inline def fold[F](f:A[F])(implicit accumulatorSemantics:AccumulatorSemantics[F,T], ops:ScurpsOps[A]):A[F] = ops.accumulate(v, f)
-  }
-
-  final implicit class RichAlgebraicIterableOnceOps[A[+_],T,CC[_],C](v:A[IterableOnceOps[T,CC,C]]) {
-    @inline def map[T2](f:A[T]=>A[T2])(implicit ops:ScurpsOps[A]):A[CC[T2]] = ops.map(v, f)
+  final implicit class RichAlgebraicTypeclass[A[+_],C[_],T](v:A[C[T]]) {
+    @inline def fold[F](f:A[F])(implicit accumulatorSemantics:AccumulatorSemantics[F,T], unconsSemantics:UnconsSemantics[C], ops:ScurpsOps[A]):A[F] =
+      ops.accumulate(v, f)
+    @inline def map[T2](f:A[T]=>A[T2])(implicit consSemantics:ConsSemantics[C], unconsSemantics:UnconsSemantics[C], ops:ScurpsOps[A]):A[C[T2]] =
+      ops.map(v, f, consSemantics, unconsSemantics)
   }
 
   final implicit class RichAlgebraicRule0[A[+_],R](v:A[Rule0[R]]) {
