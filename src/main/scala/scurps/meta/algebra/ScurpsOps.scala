@@ -5,7 +5,7 @@ import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.{AccumulatorSemantics, ConsSemantics, ElementSemantics, UnconsSemantics}
+import scurps.meta.semantics.{Accumulate, Cons, IsElement, Uncons}
 
 /** The basic operations out of which all rule implementations are composed. Concrete values are wrapped inside the type
  * constructor [[A]]. It is intentional that it is impossible to "unwrap" an [[A]] instance to get hold of its contents.
@@ -20,7 +20,7 @@ trait ScurpsOps[A[_]] { // TODO make consistent which parameters to pass implici
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
 
   /** Accumulate the values of the given collection. */
-  def accumulate[C[_],T,F](cons:A[C[T]], f:A[F])(implicit unconsSemantics:UnconsSemantics[C], accumulatorSemantics:AccumulatorSemantics[F,T]):A[F]
+  def accumulate[C[_],T,F](collection:A[C[T]], f:A[F])(implicit uncons:Uncons[C], accumulate:Accumulate[F,T]):A[F]
 
   /** Calculate the result of the given rule, with the given parameters.
    *
@@ -46,14 +46,14 @@ trait ScurpsOps[A[_]] { // TODO make consistent which parameters to pass implici
 
   /** If the given element is contained in the given collection, the given `_then` gets returned, otherwise the given
    * `_else`. */
-  def ifIsElement[C[_],T,T2](collection:A[C[T]], element:A[T], _then: =>A[T2], _else: =>A[T2], elementSemantics:ElementSemantics[C]):A[T2]
+  def ifIsElement[C[_],T,T2](collection:A[C[T]], element:A[T], _then: =>A[T2], _else: =>A[T2], isElement:IsElement[C]):A[T2]
 
   /** If the given value is zero, the given `_then` gets returned, or otherwise the given `_else`. */
   def ifZero[T,T2](value:A[T], _then: =>A[T2], _else: =>A[T2])(implicit isZero:IsZero[T]):A[T2]
 
   /** Convert the given collection by applying the given function to all of its elements. If any of the converted
    * elements ends up as undefined when converted, the result is undefined. */
-  def map[T,T2,C[_]](collection:A[C[T]], f:A[T]=>A[T2], consSemantics:ConsSemantics[C], unconsSemantics:UnconsSemantics[C]):A[C[T2]]
+  def map[T,T2,C[_]](collection:A[C[T]], f:A[T]=>A[T2], cons:Cons[C], uncons:Uncons[C]):A[C[T2]]
 
   /** Modify a value, if present. */
   def opticMod[S,T](source:A[S], optic:A[OptionLens[S,T]], f:A[T]=>A[T]):A[S]

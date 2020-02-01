@@ -1,7 +1,7 @@
 package scurps.meta.unit
 
 import scurps._
-import scurps.meta.semantics.AccumulatorSemantics
+import scurps.meta.semantics.Accumulate
 
 final case class CPBalance(sumOfNegatives:CP = 0.cp, sumOfPositives:CP = 0.cp) {
   def accumulate(value:CP):CPBalance =
@@ -12,6 +12,6 @@ final case class CPBalance(sumOfNegatives:CP = 0.cp, sumOfPositives:CP = 0.cp) {
 }
 object CPBalance {
   // TODO toString
-  implicit object CPBalanceAccumulatorSemantics extends AccumulatorSemantics[CPBalance,CP]
+  implicit object CPBalanceAccumulate extends Accumulate[CPBalance,CP]
     {override def accumulate(accumulator:CPBalance, value:CP):CPBalance = accumulator.accumulate(value)}
 }

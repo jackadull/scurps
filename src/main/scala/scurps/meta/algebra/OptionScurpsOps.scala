@@ -5,21 +5,21 @@ import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.{AccumulatorSemantics, ConsSemantics, ElementSemantics, UnconsSemantics}
+import scurps.meta.semantics.{Accumulate, Cons, IsElement, Uncons}
 
 import scala.annotation.tailrec
 
 object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
 
-  @tailrec override final def accumulate[C[_],T,F](cons:Option[C[T]], f:Option[F])(implicit unconsSemantics:UnconsSemantics[C], accumulatorSemantics:AccumulatorSemantics[F,T]):Option[F] =
-    cons match {
+  @tailrec override final def accumulate[C[_],T,F](collection:Option[C[T]], f:Option[F])(implicit uncons:Uncons[C], accumulate:Accumulate[F,T]):Option[F] =
+    collection match {
       case None => None
-      case Some(c) => unconsSemantics.uncons(c) match {
+      case Some(c) => uncons.uncons(c) match {
         case None => f
         case Some((head, tail)) => f match {
           case None => None
-          case Some(acc) => accumulate(Some(tail), Some(accumulatorSemantics.accumulate(acc, head)))
+          case Some(acc) => this.accumulate(Some(tail), Some(accumulate.accumulate(acc, head)))
         }
       }
     }
@@ -40,8 +40,8 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     case _ => None
   }
 
-  override def ifIsElement[C[_],T,T2](collection:Option[C[T]], element:Option[T], _then: =>Option[T2], _else: =>Option[T2], elementSemantics:ElementSemantics[C]):Option[T2] =
-    for(c<-collection; e<-element; result<-if(elementSemantics.isElement(c, e)) _then else _else) yield result
+  override def ifIsElement[C[_],T,T2](collection:Option[C[T]], element:Option[T], _then: =>Option[T2], _else: =>Option[T2], isElement:IsElement[C]):Option[T2] =
+    for(c<-collection; e<-element; result<-if(isElement.isElement(c, e)) _then else _else) yield result
 
   override def ifZero[T,T2](value:Option[T], _then: =>Option[T2], _else: =>Option[T2])(implicit isZero:IsZero[T]):Option[T2] =
     value match {
@@ -51,15 +51,15 @@ object OptionScurpsOps extends ScurpsOps[Option] {
     }
 
   // TODO will this be reversed?
-  override def map[T,T2,C[_]](collection:Option[C[T]], f:Option[T]=>Option[T2], consSemantics:ConsSemantics[C], unconsSemantics:UnconsSemantics[C]):Option[C[T2]] = {
-    @tailrec def recurse(remaining:C[T], soFar:C[T2]):Option[C[T2]] = unconsSemantics.uncons(remaining) match {
+  override def map[T,T2,C[_]](collection:Option[C[T]], f:Option[T]=>Option[T2], cons:Cons[C], uncons:Uncons[C]):Option[C[T2]] = {
+    @tailrec def recurse(remaining:C[T], soFar:C[T2]):Option[C[T2]] = uncons.uncons(remaining) match {
       case None => Some(soFar)
       case Some((head, tail)) => f(Some(head)) match {
         case None => None
-        case Some(head2) => recurse(tail, consSemantics.cons(head2, soFar))
+        case Some(head2) => recurse(tail, cons.cons(head2, soFar))
       }
     }
-    collection.flatMap(c => recurse(c, consSemantics.empty))
+    collection.flatMap(c => recurse(c, cons.empty))
   }
 
   override def orElse[T](value:Option[T], defaultValue: =>Option[T]):Option[T] = value.orElse(defaultValue)
