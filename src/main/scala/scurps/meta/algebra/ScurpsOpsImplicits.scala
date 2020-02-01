@@ -6,7 +6,7 @@ import scurps.meta.data.{GameContext, GameContextProperty, PMap}
 import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
 import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, OptionSetter, Setter}
 import scurps.meta.rule.Rule.Rule0
-import scurps.meta.semantics.ElementSemantics
+import scurps.meta.semantics.{AccumulatorSemantics, ElementSemantics}
 
 import scala.collection.IterableOnceOps
 import scala.language.implicitConversions
@@ -36,7 +36,7 @@ trait ScurpsOpsImplicits {
   }
 
   final implicit class RichIterable[A[+_],T](v:A[Iterable[T]]) {
-    @inline def fold[F<:Accumulator[T,F]](f:A[F])(implicit ops:ScurpsOps[A]):A[F] = ops.accumulate(v, f)
+    @inline def fold[F](f:A[F])(implicit accumulatorSemantics:AccumulatorSemantics[F,T], ops:ScurpsOps[A]):A[F] = ops.accumulate(v, f)
   }
 
   final implicit class RichAlgebraicIterableOnceOps[A[+_],T,CC[_],C](v:A[IterableOnceOps[T,CC,C]]) {

@@ -5,7 +5,7 @@ import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.{UnconsSemantics, ElementSemantics}
+import scurps.meta.semantics.{AccumulatorSemantics, ElementSemantics, UnconsSemantics}
 
 import scala.collection.IterableOnceOps
 
@@ -21,9 +21,8 @@ trait ScurpsOps[A[_]] {
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]
 
-  // TODO AccumulatorSemantics
   /** Accumulate the values of the given collection. */
-  def accumulate[C[_],T,F<:Accumulator[T,F]](cons:A[C[T]], f:A[F])(implicit unconsSemantics:UnconsSemantics[C]):A[F]
+  def accumulate[C[_],T,F](cons:A[C[T]], f:A[F])(implicit unconsSemantics:UnconsSemantics[C], accumulatorSemantics:AccumulatorSemantics[F,T]):A[F]
 
   /** Calculate the result of the given rule, with the given parameters.
    *

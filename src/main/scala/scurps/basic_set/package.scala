@@ -1,11 +1,11 @@
 package scurps
 
 import scurps.basic_set.attributes.basic.{AllBasicAttributes, CPSpentOnBasicAttribute}
-import scurps.meta.algebra.Accumulator.CPBalance
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.data.GameContext
 import scurps.meta.rule.Rule.Rule0
 import scurps.meta.rule.RuleCatalog
+import scurps.meta.unit.CPBalance
 
 package object basic_set {
   val basicSetRules:RuleCatalog = attributes.basicSetRules ++ Seq(
