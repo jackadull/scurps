@@ -5,7 +5,7 @@ import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.{ConsSemantics, ElementSemantics}
+import scurps.meta.semantics.{ElementSemantics, UnconsSemantics}
 
 import scala.annotation.tailrec
 import scala.collection.IterableOnceOps
@@ -13,14 +13,14 @@ import scala.collection.IterableOnceOps
 object OptionScurpsOps extends ScurpsOps[Option] {
   override def accordingTo[T](value:Option[T], ref:BibRef):Option[T] = value
 
-  @tailrec override final def accumulate[C[_],T,F<:Accumulator[T,F]](cons:Option[C[T]], f:Option[F])(implicit consSemantics:ConsSemantics[C]):Option[F] =
+  @tailrec override final def accumulate[C[_],T,F<:Accumulator[T,F]](cons:Option[C[T]], f:Option[F])(implicit unconsSemantics:UnconsSemantics[C]):Option[F] =
     cons match {
       case None => None
-      case Some(c) => consSemantics.headOption(c) match {
+      case Some(c) => unconsSemantics.uncons(c) match {
         case None => f
-        case Some(h) => f match {
+        case Some((head, tail)) => f match {
           case None => None
-          case Some(a) => accumulate(consSemantics.tailOption(c), Some(a.accumulate(h)))
+          case Some(acc) => accumulate(Some(tail), Some(acc.accumulate(head)))
         }
       }
     }

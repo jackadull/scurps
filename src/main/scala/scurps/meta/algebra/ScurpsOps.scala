@@ -5,7 +5,7 @@ import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
-import scurps.meta.semantics.{ConsSemantics, ElementSemantics}
+import scurps.meta.semantics.{UnconsSemantics, ElementSemantics}
 
 import scala.collection.IterableOnceOps
 
@@ -23,7 +23,7 @@ trait ScurpsOps[A[_]] {
 
   // TODO AccumulatorSemantics
   /** Accumulate the values of the given collection. */
-  def accumulate[C[_],T,F<:Accumulator[T,F]](cons:A[C[T]], f:A[F])(implicit consSemantics:ConsSemantics[C]):A[F]
+  def accumulate[C[_],T,F<:Accumulator[T,F]](cons:A[C[T]], f:A[F])(implicit unconsSemantics:UnconsSemantics[C]):A[F]
 
   /** Calculate the result of the given rule, with the given parameters.
    *
