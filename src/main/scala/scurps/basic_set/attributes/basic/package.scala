@@ -19,7 +19,7 @@ package object basic {
     },
     BasicAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
-        (FreeAttributeScore(attribute, context) :+ BoughtBasicAttributePoints(attribute, context))
+        (FreeAttributeScore(attribute, context) + BoughtBasicAttributePoints(attribute, context))
           .accordingTo(basicAttributesIntro)
     },
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
@@ -33,7 +33,7 @@ package object basic {
     },
     CPSpentOnBasicAttribute -> new Rule1[BasicAttribute,CP] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[CP] =
-        BoughtBasicAttributePoints(attribute, context) :* CPCostPerBasicAttributePoint(attribute, context)
+        BoughtBasicAttributePoints(attribute, context) * CPCostPerBasicAttributePoint(attribute, context)
     },
     FreeAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
@@ -42,7 +42,7 @@ package object basic {
     SetBasicAttribute -> new Rule2[BasicAttribute,IntScore,GameContext] {
       override def apply[A[+_]](attribute:A[BasicAttribute], newScore:A[IntScore], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[GameContext] = {
         val boughtPointsKey = attribute.get(BoughtPointsProperty)
-        context.mod(Subject) {_.setNonZero(boughtPointsKey, newScore :- FreeAttributeScore(attribute, context))}
+        context.mod(Subject) {_.setNonZero(boughtPointsKey, newScore - FreeAttributeScore(attribute, context))}
       }
     }
   )

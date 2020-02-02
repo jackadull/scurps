@@ -15,10 +15,6 @@ trait ScurpsOpsImplicits {
   @inline final implicit def pure[T,A[+_]](v:T)(implicit ops:ScurpsOps[A]):A[T] = ops.pure(v)
 
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
-    @inline def :+(rhs:A[T])(implicit add:Addition[T], ops:ScurpsOps[A]):A[T] = ops.arithmetic(v, rhs, add)
-    @inline def :-(rhs:A[T])(implicit subtract:Subtraction[T], ops:ScurpsOps[A]):A[T] = ops.arithmetic(v, rhs, subtract)
-    @inline def :*[T2,R](rhs:A[T2])(implicit multiply:Multiplication[T,T2,R], ops:ScurpsOps[A]):A[R] =
-      ops.arithmetic(v, rhs, multiply)
     @inline def accordingTo(ref:BibRef)(implicit ops:ScurpsOps[A]):A[T] = ops.accordingTo(v, ref)
     @inline def get[R](optic:A[OptionGetter[T,R]])(implicit ops:ScurpsOps[A]):A[R] = ops.opticOptionGet(v, optic)
     @inline def ifDefined[T2](_then:A[T]=>A[T2])(implicit ops:ScurpsOps[A]):A[T2] = ops.ifDefined(v, _then(v))
