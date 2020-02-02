@@ -16,7 +16,6 @@ trait ScurpsOpsImplicits {
 
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def accordingTo(ref:BibRef)(implicit ops:ScurpsOps[A]):A[T] = ops.accordingTo(v, ref)
-    @inline def get[R](optic:A[OptionGetter[T,R]])(implicit ops:ScurpsOps[A]):A[R] = ops.opticOptionGet(v, optic)
     @inline def ifDefined[T2](_then:A[T]=>A[T2])(implicit ops:ScurpsOps[A]):A[T2] = ops.ifDefined(v, _then(v))
     @inline def ifElementOf[C[_],T2](collection:A[C[T]], _then:A[T]=>A[T2], _else:A[T]=>A[T2])(implicit isElement:IsElement[C], ops:ScurpsOps[A]):A[T2] =
       ops.ifIsElement(collection, v, _then(v), _else(v), isElement)
