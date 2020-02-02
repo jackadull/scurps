@@ -1,6 +1,6 @@
 package scurps.meta.algebra
 
-import scurps.meta.algebra.Optic.{Getter, OptionGetter}
+import scurps.meta.algebra.Optic.{Getter, OptionGetter, OptionLens}
 
 import scala.language.implicitConversions
 
@@ -18,7 +18,9 @@ trait OpticImplicits {
 
   final implicit class RichOptic[S](value:S) {
     @inline def \[T](getter:Getter[S,T]):T = get(getter)
+    @inline def :=\[T](lens:OptionLens[S,T])(f:T=>T):S = mod(lens)(f)
 
     @inline def get[T](getter:Getter[S,T]):T = getter.get(value)
+    @inline def mod[T](lens:OptionLens[S,T])(f:T=>T):S = lens.mod(value, f)
   }
 }
