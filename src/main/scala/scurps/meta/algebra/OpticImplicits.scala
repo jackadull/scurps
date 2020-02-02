@@ -17,6 +17,8 @@ trait OpticImplicits {
     }
 
   final implicit class RichOptic[S](value:S) {
+    @inline def \[T](getter:Getter[S,T]):T = get(getter)
+
     @inline def get[T](getter:Getter[S,T]):T = getter.get(value)
   }
 }
