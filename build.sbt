@@ -10,6 +10,6 @@ lazy val scurpsBuild:Project = project.in(file("."))
     scalacOptions ++= Seq("-Yrangepos", "-Ywarn-unused:imports")
   )
 
-scalafixDependencies += "org.scalalint" %% "rules" % "0.1.4"
+scalafixDependencies in ThisBuild += "org.scalalint" %% "rules" % "0.2.1"
 
 addCommandAlias("fix", "scalafix; test:scalafix")
