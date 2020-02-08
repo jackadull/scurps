@@ -9,3 +9,5 @@ lazy val scurpsBuild:Project = project.in(file("."))
     addCompilerPlugin(scalafixSemanticdb),
     scalacOptions ++= Seq("-Yrangepos", "-Ywarn-unused:imports")
   )
+
+addCommandAlias("fix", "scalafix RemoveUnused; test:scalafix RemoveUnused")
