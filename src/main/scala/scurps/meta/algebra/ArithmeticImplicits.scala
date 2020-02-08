@@ -1,6 +1,8 @@
 package scurps.meta.algebra
 
 import scurps.meta.algebra.Arithmetic.{Addition, Division, Multiplication, Subtraction}
+import scurps.meta.data.GameContext
+import scurps.meta.rule.Rule
 
 trait ArithmeticImplicits {
   @inline implicit final def liftAddition[A[_],T](implicit addition:Addition[T], alg:ScurpsOps[A]):Addition[A[T]] =
@@ -29,5 +31,14 @@ trait ArithmeticImplicits {
     @inline def -(that:T)(implicit subtraction:Subtraction[T]):T = subtraction(value, that)
     @inline def *[T2,R](that:T2)(implicit multiplication:Multiplication[T,T2,R]):R = multiplication(value, that)
     @inline def /[T2,R](that:T2)(implicit division:Division[T,T2,R]):R = division(value, that)
+  }
+
+  final implicit class RichArithmeticRule[P[_[_]],R](self:Rule[P,R]) {
+    @inline def +(rhs:Rule[P,R])(implicit addition:Addition[R]):Rule[P,R] = new Rule[P,R] {
+      // TODO toString
+      override def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
+        ops.arithmetic(self.applyP(params, context), rhs.applyP(params, context), addition)
+    }
+    // TODO finish arithmetic operations
   }
 }
