@@ -1,14 +1,12 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.data.GameContextProperty
-import scurps.meta.data.{GameContext, GameContextProperty, PMap}
-import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
-import scurps.meta.algebra.Optic.{OptionGetter, OptionLens, OptionSetter, Setter}
+import scurps.meta.data.GameContext
+import scurps.meta.algebra.Arithmetic.IsZero
+import scurps.meta.algebra.Optic.{OptionLens, OptionSetter, Setter}
 import scurps.meta.rule.Rule.Rule0
 import scurps.meta.algebra.Collection.{Accumulate, Cons, IsElement, Uncons}
 
-import scala.collection.IterableOnceOps
 import scala.language.implicitConversions
 
 trait ScurpsOpsImplicits {

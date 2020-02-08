@@ -5,3 +5,7 @@ lazy val jackadull = net.jackadull.build.JackadullBuild.onTravis(name = "scurps"
 
 lazy val scurpsBuild:Project = project.in(file("."))
   .configure(jackadull.project, jackadull.dependencies(ScalaTest % Test))
+  .settings(
+    addCompilerPlugin(scalafixSemanticdb),
+    scalacOptions ++= Seq("-Yrangepos", "-Ywarn-unused:imports")
+  )
