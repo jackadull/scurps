@@ -1,6 +1,6 @@
 package scurps.meta.algebra
 
-object Semantic {
+object Collection {
   trait Accumulate[A,T] {def accumulate(accumulator:A, value:T):A}
 
   trait Cons[C[_]] {

@@ -3,7 +3,7 @@ package scurps.meta.algebra
 import scurps.bib.BibRef
 import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
 import scurps.meta.algebra.Optic._
-import scurps.meta.algebra.Semantic.{Accumulate, Cons, IsElement, Uncons}
+import scurps.meta.algebra.Collection.{Accumulate, Cons, IsElement, Uncons}
 import scurps.meta.data.GameContext
 import scurps.meta.rule.{Rule, RuleKey}
 
