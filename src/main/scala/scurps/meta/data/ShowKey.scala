@@ -32,7 +32,7 @@ object ShowKey {
 
   private def showName(cls:Class[_]):String = cls.getSimpleName.replaceAll("\\$$", "")
 
-  private def showPackageAndEnclosing(cls:Class[_]):String = Option(cls.getEnclosingClass) match {
+  def showPackageAndEnclosing(cls:Class[_]):String = Option(cls.getEnclosingClass) match {
     case None => cls.getPackage.getName
     case Some(enclosing) => s"${showPackageAndEnclosing(enclosing)}.${showName(enclosing)}"
   }

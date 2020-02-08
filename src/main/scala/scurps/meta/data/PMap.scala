@@ -30,7 +30,7 @@ object PMap {
 
   private final case class Impl[K[_]](baseMap:Map[K[_],Any]) extends MapBasedPMap[K,Impl[K]] {
     override protected def withBaseMap(newBaseMap:Map[K[_],Any]):Impl[K] = Impl[K](newBaseMap)
-    baseMap.toString
+    override def toString:String = baseMap.toString
   }
 }
 

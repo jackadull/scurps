@@ -17,7 +17,7 @@ trait CollectionImplicits {
     override def empty[T]:Set[T] = Set.empty
     override def isElement[E](collection:Set[E], element:E):Boolean = collection(element)
     override def uncons[T](collection:Set[T]):Option[(T, Set[T])] =
-      if(collection.isEmpty) None else Some((collection.head, collection.tail))
+      collection.headOption.map(head => (head, collection.drop(1)))
   }
 
   // TODO toString
@@ -26,6 +26,6 @@ trait CollectionImplicits {
     override def empty[T]:Seq[T] = Seq.empty
     override def isElement[E](collection:Seq[E], element:E):Boolean = collection.contains(element)
     override def uncons[T](collection:Seq[T]):Option[(T, Seq[T])] =
-      if(collection.isEmpty) None else Some((collection.head, collection.tail))
+      collection.headOption.map(head => (head, collection.drop(1)))
   }
 }

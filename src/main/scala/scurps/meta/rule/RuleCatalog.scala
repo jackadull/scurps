@@ -19,9 +19,9 @@ object RuleCatalog {
     }
     override def ++(kvs:Seq[(RuleKey[P,R],Rule[P,R]) forSome {type P[_[_]];type R}]):MapRuleCatalog =
       kvs.foldLeft(this)(_ + _)
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     override def get[P[_[_]],R](key:RuleKey[P,R]):Option[Rule[P,R]] =
       map.get(key).asInstanceOf[Option[Rule[P,R]]]
     override def isEmpty:Boolean = map.isEmpty
-    override def toString:String = super.toString
   }
 }

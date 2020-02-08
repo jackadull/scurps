@@ -12,4 +12,8 @@ lazy val scurpsBuild:Project = project.in(file("."))
 
 scalafixDependencies in ThisBuild += "org.scalalint" %% "rules" % "0.2.1"
 
+wartremoverErrors ++= Seq(Wart.ArrayEquals, Wart.EitherProjectionPartial, Wart.Enumeration, Wart.ExplicitImplicitTypes,
+  Wart.FinalCaseClass, Wart.FinalVal, Wart.MutableDataStructures, Wart.Null, Wart.Option2Iterable, Wart.OptionPartial,
+  Wart.Return, Wart.TraversableOps, Wart.TryPartial, Wart.Var, Wart.While)
+
 addCommandAlias("fix", "scalafix; test:scalafix")
