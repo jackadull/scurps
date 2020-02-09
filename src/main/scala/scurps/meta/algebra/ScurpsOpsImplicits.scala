@@ -11,7 +11,13 @@ import scurps.meta.algebra.Collection.{Accumulate, Cons, IsElement, Uncons}
 import scala.language.implicitConversions
 
 trait ScurpsOpsImplicits {
-  @inline final implicit def pure[T,A[+_]](v:T)(implicit ops:ScurpsOps[A]):A[T] = ops.pure(v)
+  // TODO not an implicit
+  final implicit def pure[T](v:T):Rule0[T] = new Rule0[T] {
+    // TODO toString
+    override def apply[A[+_]](context:A[GameContext])(implicit ops:ScurpsOps[A]):A[T] = ops.pure(v)
+  }
+
+  @inline final implicit def pureValue[T,A[+_]](v:T)(implicit ops:ScurpsOps[A]):A[T] = ops.pure(v)
 
   final implicit class RichAlgebraic[A[+_],T](v:A[T]) {
     @inline def accordingTo(ref:BibRef)(implicit ops:ScurpsOps[A]):A[T] = ops.accordingTo(v, ref)

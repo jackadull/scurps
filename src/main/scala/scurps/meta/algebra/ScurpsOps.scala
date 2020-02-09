@@ -15,6 +15,7 @@ import scurps.meta.rule.{Rule, RuleKey}
  *
  * Formally, this is an algebra. It is intended to be passed around implicitly. */
 trait ScurpsOps[A[_]] { // TODO make consistent which parameters to pass implicitly and which not
+  // TODO see if we can make it that A[T] === Rule0[T], i.e. Rule[Unit,T], as this would enable universal operations that work on rules and arithmetic values alike
   /** Attach a bibliographic reference to the given value. The reference denotes the place where the rule is described
    * in a rulebook. This is the rule that defines the last operation that created the value. */
   def accordingTo[T](value:A[T], ref:BibRef):A[T]

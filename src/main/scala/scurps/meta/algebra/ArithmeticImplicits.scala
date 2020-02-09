@@ -39,6 +39,11 @@ trait ArithmeticImplicits {
       override def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
         ops.arithmetic(self.applyP(params, context), rhs.applyP(params, context), addition)
     }
+    @inline def *[R2,R3](rhs:Rule[P,R2])(implicit multiplication:Multiplication[R,R2,R3]):Rule[P,R3] = new Rule[P,R3] {
+      // TODO toString
+      override def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R3] =
+        ops.arithmetic(self.applyP(params, context), rhs.applyP(params, context), multiplication)
+    }
     // TODO finish arithmetic operations
   }
 }

@@ -6,17 +6,14 @@ import scurps.basic_set.bib.G4e_Characters.Ch01_Creating_A_Character.Basic_Attri
 import scurps.meta.algebra.ScurpsOps
 import scurps.meta.data.GameContext
 import scurps.meta.data.GameContext.Subject
-import scurps.meta.rule.Rule.{Rule0, Rule1, Rule2}
+import scurps.meta.rule.Rule.{Rule1, Rule2}
 import scurps.meta.rule.RuleCatalog
 import scurps.meta.unit.Score.IntScore
 import scurps.meta.unit.{CP, Score}
 
 package object basic {
   val basicSetRules:RuleCatalog = RuleCatalog(
-    AllBasicAttributes -> new Rule0[Set[BasicAttribute]] {
-      override def apply[A[+_]](context:A[GameContext])(implicit ops:ScurpsOps[A]):A[Set[BasicAttribute]] =
-        Set(Dexterity, Health, Intelligence, Strength)
-    },
+    AllBasicAttributes -> pure(Set(Dexterity, Health, Intelligence, Strength)),
     BasicAttributeScore -> (FreeAttributeScore + BoughtBasicAttributePoints).accordingTo(basicAttributesIntro),
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
@@ -27,10 +24,7 @@ package object basic {
         attribute.ifElementOf(Set[BasicAttribute](Strength, Health), _ => 10.cp, _ => 20.cp)
           .accordingTo(basicAttributesIntro)
     },
-    CPSpentOnBasicAttribute -> new Rule1[BasicAttribute,CP] {
-      override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[CP] =
-        BoughtBasicAttributePoints(attribute, context) * CPCostPerBasicAttributePoint(attribute, context)
-    },
+    CPSpentOnBasicAttribute -> BoughtBasicAttributePoints * CPCostPerBasicAttributePoint,
     FreeAttributeScore -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
         (context \ Subject).ifDefined(_ => Score(10)).accordingTo(basicAttributesIntro)
