@@ -4,6 +4,7 @@ import scurps.bib.BibRef
 import scurps.meta.data.GameContext
 import scurps.meta.algebra.Arithmetic.IsZero
 import scurps.meta.algebra.Optic.{OptionLens, OptionSetter, Setter}
+import scurps.meta.rule.Rule
 import scurps.meta.rule.Rule.Rule0
 import scurps.meta.algebra.Collection.{Accumulate, Cons, IsElement, Uncons}
 
@@ -33,6 +34,14 @@ trait ScurpsOpsImplicits {
       ops.accumulate(v, f)
     @inline def map[T2](f:A[T]=>A[T2])(implicit cons:Cons[C], uncons:Uncons[C], ops:ScurpsOps[A]):A[C[T2]] =
       ops.map(v, f, cons, uncons)
+  }
+
+  final implicit class RichAlgebraicRule[P[_[_]],R](rule:Rule[P,R]) {
+    @inline def accordingTo(ref:BibRef):Rule[P,R] = new Rule[P,R] {
+      // TODO toString
+      override def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
+        ops.accordingTo(rule.applyP(params, context), ref)
+    }
   }
 
   final implicit class RichAlgebraicRule0[A[+_],R](v:A[Rule0[R]]) {

@@ -17,7 +17,7 @@ package object basic {
       override def apply[A[+_]](context:A[GameContext])(implicit ops:ScurpsOps[A]):A[Set[BasicAttribute]] =
         Set(Dexterity, Health, Intelligence, Strength)
     },
-    BasicAttributeScore -> (FreeAttributeScore + BoughtBasicAttributePoints), // TODO .accordingTo(basicAttributesIntro)
+    BasicAttributeScore -> (FreeAttributeScore + BoughtBasicAttributePoints).accordingTo(basicAttributesIntro),
     BoughtBasicAttributePoints -> new Rule1[BasicAttribute,IntScore] {
       override def apply[A[+_]](attribute:A[BasicAttribute], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[IntScore] =
         (context \ Subject).ifDefined {subject => (subject \ (attribute \ BoughtPointsProperty)).orElse(Score(0))}
@@ -43,5 +43,5 @@ package object basic {
     }
   )
 
-  private val basicAttributesIntro = Basic_Attributes.chapter.page(14)
+  private lazy val basicAttributesIntro = Basic_Attributes.chapter.page(14)
 }
