@@ -1,6 +1,6 @@
 package scurps.meta.unit
 
-import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
+import scurps.meta.algebra.ArithmeticOperation.{Addition, IsZero, Multiplication, Subtraction}
 import scurps.meta.unit.Score.IntScore
 
 /** Character points. They only come in integer values. */

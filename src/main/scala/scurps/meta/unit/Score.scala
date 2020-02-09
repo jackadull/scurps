@@ -1,6 +1,6 @@
 package scurps.meta.unit
 
-import scurps.meta.algebra.Arithmetic.{Addition, IsZero, Multiplication, Subtraction}
+import scurps.meta.algebra.ArithmeticOperation.{Addition, IsZero, Multiplication, Subtraction}
 
 sealed trait Score[+A] extends Any
 object Score {

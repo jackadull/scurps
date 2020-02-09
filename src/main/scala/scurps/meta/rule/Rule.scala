@@ -1,6 +1,6 @@
 package scurps.meta.rule
 
-import scurps.meta.algebra.ScurpsOps
+import scurps.meta.algebra.{ArithmeticAlgebra, ArithmeticOperation, ScurpsOps}
 import scurps.meta.data.GameContext
 
 trait Rule[-P[_[_]],+R] {
@@ -34,5 +34,21 @@ object Rule {
     override final def applyP[A[+_]](params:(A[T1], A[T2], A[T3]), context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
       apply(params._1, params._2, params._3, context)
     override def toString:String = "<rule3>"
+  }
+
+  implicit object RuleArithmeticAlgebra extends ArithmeticAlgebra[Rule,Rule] {
+    override def arithmeticOperation[P[_[_]],T1,R](operation:ArithmeticOperation.ArithmeticOperation1[T1,R], v1:Rule[P,T1]):Rule[P,R] =
+      new Rule[P,R] {
+        // TODO toString
+        override def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
+          ops.arithmeticOperation(operation, v1.applyP(params, context))
+      }
+
+    override def arithmeticOperation[P[_[_]],T1,T2,R](operation:ArithmeticOperation.ArithmeticOperation2[T1,T2,R], v1:Rule[P,T1], v2:Rule[P,T2]):Rule[P,R] =
+      new Rule[P,R] {
+        // TODO toString
+        override def applyP[A[+_]](params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R] =
+          ops.arithmeticOperation(operation, v1.applyP(params, context), v2.applyP(params, context))
+      }
   }
 }

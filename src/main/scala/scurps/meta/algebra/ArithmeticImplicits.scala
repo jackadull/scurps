@@ -1,26 +1,26 @@
 package scurps.meta.algebra
 
-import scurps.meta.algebra.Arithmetic.{Addition, Division, Multiplication, Subtraction}
+import scurps.meta.algebra.ArithmeticOperation.{Addition, Division, Multiplication, Subtraction}
 import scurps.meta.data.GameContext
 import scurps.meta.rule.Rule
 
 trait ArithmeticImplicits {
-  @inline implicit final def liftAddition[A[_],T](implicit addition:Addition[T], alg:ScurpsOps[A]):Addition[A[T]] =
+  @inline implicit final def liftAddition[A[+_],T](implicit addition:Addition[T], alg:ScurpsOps[A]):Addition[A[T]] =
     new Addition[A[T]] {
       // TODO toString
       override final def apply(lhs:A[T], rhs:A[T]):A[T] = alg.arithmetic(lhs, rhs, addition)
     }
-  @inline implicit final def liftDivision[A[_],T1,T2,R](implicit division:Division[T1,T2,R], alg:ScurpsOps[A]):Division[A[T1],A[T2],A[R]] =
+  @inline implicit final def liftDivision[A[+_],T1,T2,R](implicit division:Division[T1,T2,R], alg:ScurpsOps[A]):Division[A[T1],A[T2],A[R]] =
     new Division[A[T1],A[T2],A[R]] {
       // TODO toString
       override final def apply(lhs:A[T1], rhs:A[T2]):A[R] = alg.arithmetic(lhs, rhs, division)
     }
-  @inline implicit final def liftMultiplication[A[_],T1,T2,R](implicit multiplication:Multiplication[T1,T2,R], alg:ScurpsOps[A]):Multiplication[A[T1],A[T2],A[R]] =
+  @inline implicit final def liftMultiplication[A[+_],T1,T2,R](implicit multiplication:Multiplication[T1,T2,R], alg:ScurpsOps[A]):Multiplication[A[T1],A[T2],A[R]] =
     new Multiplication[A[T1],A[T2],A[R]] {
       // TODO toString
       override final def apply(lhs:A[T1], rhs:A[T2]):A[R] = alg.arithmetic(lhs, rhs, multiplication)
     }
-  @inline implicit final def liftSubtraction[A[_],T](implicit subtraction:Subtraction[T], alg:ScurpsOps[A]):Subtraction[A[T]] =
+  @inline implicit final def liftSubtraction[A[+_],T](implicit subtraction:Subtraction[T], alg:ScurpsOps[A]):Subtraction[A[T]] =
     new Subtraction[A[T]] {
       // TODO toString
       override final def apply(lhs:A[T], rhs:A[T]):A[T] = alg.arithmetic(lhs, rhs, subtraction)

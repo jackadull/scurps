@@ -2,7 +2,7 @@ package scurps.meta.algebra
 
 import scurps.bib.BibRef
 import scurps.meta.data.GameContext
-import scurps.meta.algebra.Arithmetic.IsZero
+import scurps.meta.algebra.ArithmeticOperation.IsZero
 import scurps.meta.algebra.Optic.{OptionLens, OptionSetter, Setter}
 import scurps.meta.rule.Rule
 import scurps.meta.rule.Rule.Rule0

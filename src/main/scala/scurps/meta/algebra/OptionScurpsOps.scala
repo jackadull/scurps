@@ -1,7 +1,7 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.algebra.Arithmetic.IsZero
+import scurps.meta.algebra.ArithmeticOperation.IsZero
 import scurps.meta.algebra.Optic._
 import scurps.meta.algebra.Collection.{Accumulate, Cons, IsElement, Uncons}
 import scurps.meta.data.GameContext
@@ -30,10 +30,16 @@ object OptionScurpsOps extends ScurpsOps[Option] {
   override def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[Option], context:Option[GameContext])(implicit ops:ScurpsOps[Option]):Option[R] =
     for(ctx<-context; rule<-ctx.ruleCatalog.get(key); result<-rule.applyP(params, context)) yield result
 
-  override def arithmetic[T1,R](v:Option[T1], aop:Arithmetic.ArithmeticOp1[T1,R]):Option[R] = v.map(aop)
+  override def arithmetic[T1,R](v:Option[T1], aop:ArithmeticOperation.ArithmeticOperation1[T1,R]):Option[R] = v.map(aop)
 
-  override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:Arithmetic.ArithmeticOp2[T1, T2, R]):Option[R] =
+  override def arithmetic[T1, T2, R](lhs:Option[T1], rhs:Option[T2], aop:ArithmeticOperation.ArithmeticOperation2[T1, T2, R]):Option[R] =
     for(l<-lhs; r<-rhs) yield aop(l, r)
+
+  override def arithmeticOperation[P[_[_]],T1,R](operation:ArithmeticOperation.ArithmeticOperation1[T1,R], v1:Option[T1]):Option[R] =
+    v1.map(operation)
+
+  override def arithmeticOperation[P[_[_]],T1,T2,R](operation:ArithmeticOperation.ArithmeticOperation2[T1,T2,R], v1:Option[T1], v2:Option[T2]):Option[R] =
+    for(a1<-v1; a2<-v2) yield operation(a1, a2)
 
   override def ifDefined[T,T2](value:Option[T], _then: =>Option[T2]):Option[T2] = value match {
     case Some(_) => _then

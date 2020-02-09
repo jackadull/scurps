@@ -1,7 +1,7 @@
 package scurps.meta.algebra
 
 import scurps.bib.BibRef
-import scurps.meta.algebra.Arithmetic.{ArithmeticOp1, ArithmeticOp2, IsZero}
+import scurps.meta.algebra.ArithmeticOperation.{ArithmeticOperation1, ArithmeticOperation2, IsZero}
 import scurps.meta.algebra.Optic._
 import scurps.meta.algebra.Collection.{Accumulate, Cons, IsElement, Uncons}
 import scurps.meta.data.GameContext
@@ -14,7 +14,7 @@ import scurps.meta.rule.{Rule, RuleKey}
  * operations, in order to make them human readable.
  *
  * Formally, this is an algebra. It is intended to be passed around implicitly. */
-trait ScurpsOps[A[_]] { // TODO make consistent which parameters to pass implicitly and which not
+trait ScurpsOps[A[+_]] extends ArithmeticAlgebra[({type CA[-P[_[_]],+T] = A[T]})#CA,({type CA[-P[_[_]],+T] = A[T]})#CA] { // TODO make consistent which parameters to pass implicitly and which not
   // TODO see if we can make it that A[T] === Rule0[T], i.e. Rule[Unit,T], as this would enable universal operations that work on rules and arithmetic values alike
   /** Attach a bibliographic reference to the given value. The reference denotes the place where the rule is described
    * in a rulebook. This is the rule that defines the last operation that created the value. */
@@ -36,11 +36,13 @@ trait ScurpsOps[A[_]] { // TODO make consistent which parameters to pass implici
    * invoked rule. */
   def applyRuleByKey[P[_[_]],R](key:RuleKey[P,R], params:P[A], context:A[GameContext])(implicit ops:ScurpsOps[A]):A[R]
 
+  // TODO remove
   /** Single-parameter arithmetic operation. */
-  def arithmetic[T1,R](v:A[T1], aop:ArithmeticOp1[T1,R]):A[R]
+  def arithmetic[T1,R](v:A[T1], aop:ArithmeticOperation1[T1,R]):A[R]
 
+  // TODO remove
   /** Two-parameter arithmetic operation. */
-  def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOp2[T1,T2,R]):A[R]
+  def arithmetic[T1,T2,R](lhs:A[T1], rhs:A[T2], aop:ArithmeticOperation2[T1,T2,R]):A[R]
 
   /** If the given value is defined, the given `_then` gets returned. Otherwise, the result is undefined. */
   def ifDefined[T,T2](value:A[T], _then: =>A[T2]):A[T2]
